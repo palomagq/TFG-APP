@@ -14,7 +14,6 @@
 
     </style>
 
-
 <div class="content-wrapper calendar_wrapper">
     <section class="content-header" style="text-align: center; margin-left: 22em;">
         <div class="container-fluid" >
