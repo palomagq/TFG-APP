@@ -43,14 +43,26 @@
 </div>
 
 
-<div>
+@if((Session('idRole') == 1 ) || (Session('idRole') == 2 )  || (Session('idRole') == 3 ))
 
-    <div class="floating-container">
-        <div class="floating-button btn btn-success" type="button" data-toggle="modal" data-target="#createModal">
-            +
+    <div>
+        <div class="floating-container">
+            <div class="floating-button btn btn-success" type="reset" data-toggle="modal" data-target="#createModal">
+                +
+            </div>
+        </div> 
+    </div>
+
+@else
+    <div  style="display: none">
+        <div class="floating-container">
+            <div class="floating-button btn btn-success" type="reset" data-toggle="modal" data-target="#createModal">
+                +
+            </div>
         </div>
-    </div>  
-</div>
+    </div>
+
+@endif 
 
 
 @endsection

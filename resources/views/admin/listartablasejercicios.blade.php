@@ -17,42 +17,7 @@
                         
                         <div class="row">
                             <div class="col-sm-12">
-
-                                    <!--<table class="table table-condensed" >
-                                            <thead>
-                                                    <tr data-toggle="collapse" data-target="#demo1" class="accordion-toggle" aria-expanded="false">
-
-                                                            <th value="" style="font-size: 1.5em">
-                                                                Nombre de la tabla/rutina de ejercicios                                              
-                                                            </th>                                             
-                                                    </tr>
-                                            
-                                            </thead>
-                                            <tbody>                                        
-                                                <tr>
-                                                    <td colspan="12" class="hiddenRow">
-                                                        <div class="accordian-body" id="demo1"> 
-                                                            <table class="table table-striped">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Nombre del Ejercicio</th>
-                                                                        <th>Series</th>
-                                                                        <th>Repeticiones</th>
-                                                                        <th>Tiempo</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                   
-                                                                </tbody>
-                                                            </table>    
-                                                        </div>                                          
-                                                    </td>
-                                                </tr>
-
-                                                
-                                            </tbody>
-                                    </table>-->
-
+           
                                     <table id="table_id" class="table table-bordered table-striped dataTable dtr-inline"  cellspacing="0" width="100%" top="2em">
                                         <thead>
                                             <tr>
@@ -77,14 +42,15 @@
 </div>
 
 
-<div>
 
+<div>
     <div class="floating-container">
         <div class="floating-button btn btn-success" type="reset" data-toggle="modal" data-target="#createModal">
             +
         </div>
-    </div>  
+    </div> 
 </div>
+
 
 
 @endsection

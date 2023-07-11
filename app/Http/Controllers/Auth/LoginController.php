@@ -147,9 +147,9 @@ class LoginController extends Controller
         }else if($user->role_id==2){
             return redirect('listarJefes');
         }else if($user->role_id==3){
-            return redirect('listarRecepcion');    
+            return redirect('listarPersonal');    
         }else if($user->role_id==4){
-            return redirect('listarPersonal');
+            return redirect('listarSocios');
         }else if($user->role_id==5){
             return redirect('CalendarioHorarioClase');
             //return route('name')
