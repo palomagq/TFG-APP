@@ -334,7 +334,11 @@
                 url: "{{route('selectdataSocios')}}",//'php/identidades.php',
                 type: 'post',
                 data: {
-                    "_token": $("meta[name='csrf-token']").attr("content")
+                    "_token": $("meta[name='csrf-token']").attr("content"),
+                    "id_gimnasio": function() { 
+                        console.log($('#id_gimnasio_selected_calendario').val());
+                        return $('#id_gimnasio_selected_calendario').val() 
+                    },
                 },                          
             },
             responsive: true,
@@ -541,7 +545,11 @@
 
 
 
-
+    //hace el rellamado y filtro del gimnasio para el admin->listener
+    $('#id_gimnasio_selected_calendario').on('change', function() {
+        console.log("reload")
+        datatable.ajax.reload();
+    });
 
 
         /*para el caso en el que no insertemos ni nada por ajax, por ejemplo un post de un formulario que devuelve el action*/

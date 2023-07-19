@@ -141,6 +141,16 @@ class LoginController extends Controller
             return redirect('checkout');
         }
 
+
+        //usuario que pertenece a un gimnasio
+        $user_gimnasio=DB::select("SELECT u.id,g.gimnasio_id,g.nombre as nombre_gimnasio
+        FROM usuarios as u inner join usuario_gimnasio as ug on u.id=ug.usuarios_id inner join gimnasio as g on ug.gimnasio_id=g.gimnasio_id 
+        where  u.id=".Session('idUsuario'));
+
+        Session::put('id_user_gimnasio',$user_gimnasio[0]->nombre_gimnasio);
+        Session::put('id_gimnasio',$user_gimnasio[0]->gimnasio_id);
+
+
         if($user->role_id==1){
             //user
             return redirect('listarUsuarios');

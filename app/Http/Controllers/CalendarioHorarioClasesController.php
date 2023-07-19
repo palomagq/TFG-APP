@@ -29,16 +29,28 @@ class CalendarioHorarioClasesController extends Controller
         public function CalendarioHorarioClaseGETDATA(Request $request){
 
             try { 
-                $horario_clases = DB::select("select concat(c.nombre,' - ',s.nombre) as title,concat(cp.fecha_clase,'T',cp.hora_inicio) as start, 
-                concat(cp.fecha_clase,'T',cp.hora_fin) as end
-                ,case when s.nombre='Sala 1' then '#3498DB'
-                when s.nombre='Sala 2' then '#2ECC71'
-                when s.nombre='Sala 3' then '#E74C3C'
-                else '#F4D03F' end as color, cp.clase_planificada_id as myId
-                FROM clase_planificada as cp left join clases as c on cp.clases_id=c.clases_id left join sala as s on cp.sala_id=s.sala_id 
-                left join gimnasio as g on c.gimnasio_id=g.gimnasio_id   
-                where c.gimnasio_id=".$request->id."  ");
-    
+
+                if(Session('idRole') == 1){
+                    $horario_clases = DB::select("select concat(c.nombre,' - ',s.nombre) as title,concat(cp.fecha_clase,'T',cp.hora_inicio) as start, 
+                    concat(cp.fecha_clase,'T',cp.hora_fin) as end
+                    ,case when s.nombre='Sala 1' then '#3498DB'
+                    when s.nombre='Sala 2' then '#2ECC71'
+                    when s.nombre='Sala 3' then '#E74C3C'
+                    else '#F4D03F' end as color, cp.clase_planificada_id as myId
+                    FROM clase_planificada as cp left join clases as c on cp.clases_id=c.clases_id left join sala as s on cp.sala_id=s.sala_id 
+                    left join gimnasio as g on c.gimnasio_id=g.gimnasio_id   
+                    where c.gimnasio_id=".$request->id."  ");
+                }else{
+                    $horario_clases = DB::select("select concat(c.nombre,' - ',s.nombre) as title,concat(cp.fecha_clase,'T',cp.hora_inicio) as start, 
+                    concat(cp.fecha_clase,'T',cp.hora_fin) as end
+                    ,case when s.nombre='Sala 1' then '#3498DB'
+                    when s.nombre='Sala 2' then '#2ECC71'
+                    when s.nombre='Sala 3' then '#E74C3C'
+                    else '#F4D03F' end as color, cp.clase_planificada_id as myId
+                    FROM clase_planificada as cp left join clases as c on cp.clases_id=c.clases_id left join sala as s on cp.sala_id=s.sala_id 
+                    left join gimnasio as g on c.gimnasio_id=g.gimnasio_id   
+                    where  g.gimnasio_id=".Session('id_gimnasio'));
+                }
     
                 echo json_encode($horario_clases);
 

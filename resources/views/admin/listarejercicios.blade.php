@@ -16,53 +16,6 @@
                         
                         <div class="row">
                             <div class="col-sm-12">
-                               <!-- @foreach($categorias as $c)
-
-                                    <table class="table table-condensed" >
-                                            <thead>
-                                                    <tr data-toggle="collapse" data-target="#{{$c->categoria_ejercicio_id}}" class="accordion-toggle" aria-expanded="false">
-
-                                                            <th value="{{$c->categoria_ejercicio_id}}" style="font-size: 1.5em">
-                                                                {{$c->nombre}}                                              
-                                                            </th>                                             
-                                                    </tr>
-                                            
-                                            </thead>
-                                            <tbody>                                        
-                                                <tr>
-                                                    <td colspan="12" class="hiddenRow">
-                                                        <div class="accordian-body collapse" id="{{$c->categoria_ejercicio_id}}"> 
-                                                            <table class="table table-striped">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Nombre del Ejercicio</th>
-                                                                        <th>Ejercicio Por Defecto</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                            @foreach($ejercicios as $e)
-                                                                                @if($e->categoria_id === $c->categoria_ejercicio_id)
-                                                                                    <tr>
-                                                                                        <td> {{$e->nombre}}</td>
-                                                                                        @if($e->ejercicioPorDefecto == 1)
-                                                                                            <td> Sí </td>
-                                                                                        @else
-                                                                                            <td> No </td>
-                                                                                        @endif
-                                                                                    </tr> 
-                                                                                @endif
-                                                                            @endforeach     
-                                                                </tbody>
-                                                            </table>    
-                                                        </div>                                          
-                                                    </td>
-                                                </tr>
-
-                                                
-                                            </tbody>
-                                    </table>
-                                    @endforeach
-                                -->
 
                                 <table id="table_id" class="table table-bordered table-striped dataTable dtr-inline"  cellspacing="0" width="100%" top="2em">
                                     <thead>

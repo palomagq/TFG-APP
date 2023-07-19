@@ -252,7 +252,11 @@ $(document).ready( function () {
                 url: "{{route('selectdataClaseMatriculadaGETDATA')}}",
                 type: 'post',
                 data: {
-                    "_token": $("meta[name='csrf-token']").attr("content")
+                    "_token": $("meta[name='csrf-token']").attr("content"),
+                    "id_gimnasio": function() { 
+                        console.log($('#id_gimnasio_selected_calendario').val());
+                        return $('#id_gimnasio_selected_calendario').val() 
+                    },
                 },
                                     
             },
@@ -406,6 +410,12 @@ $(document).ready( function () {
                 }
             });
         }
+
+        //hace el rellamado y filtro del gimnasio para el admin->listener
+        $('#id_gimnasio_selected_calendario').on('change', function() {
+            console.log("reload")
+            datatable.ajax.reload();
+        });
 
        
 });

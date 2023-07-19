@@ -34,16 +34,17 @@
     <section class="content" style="margin-left: -3em;margin-right: 3em;">
         <div class="container-fluid">
             <div class="row">
-                <div class="col">
-                <select class="js-example-responsive js-example-placeholder-single js-states form-control col-md-6"
-                             id="id_gimnasio_selected_calendario" required> <!-- style="margin-bottom:2em;margin-left: -16em;"-->
+                <!--<div class="col">
+
+                        <select class="js-example-responsive js-example-placeholder-single js-states form-control col-md-6"
+                             id="id_gimnasio_selected_calendario" required>
                                 <option value=""></option>
                                 @foreach($gimnasios as $g)
                                     <option  value="{{$g->gimnasio_id}}">{{$g->nombre}} - {{$g->localidad}}</option>
                                 @endforeach       
                         </select>
-                    </div>
-            </div>
+                </div>
+            </div>-->
             <div class="row">
                 <div class="col">
                     <div class="card card-primary">
@@ -92,105 +93,6 @@
 
 
 @section('modal')
-
-
- <!-- Modal  Create-->
- <!--<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content" style="min-width: 650px">
-            <div class="modal-header">
-            <h1>Añadir Horario/Clase</h1>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-             </div>
-             
-            <div class="modal-body" style=" margin-top: -2em;">
-                
-                <form action="{{route('insertdataHorarioClase')}}" method="POST" > 
-                    @csrf
-                    <hr>
-                    <div class="card-body" style="padding: 0;">
-                        <div class="form-group">
-                            <label style="font-size:13px" for="listado_gimnasio"><b>Listado Gimnasio</b></label>
-
-                                <select class="js-example-responsive js-example-placeholder-single js-states form-control" id="id_label_gimnasio" required>
-                                            <option value=""></option>
-                                        @foreach($gimnasios as $g)
-                                            <option value="{{$g->gimnasio_id}}">{{$g->nombre}} - {{$g->localidad}}</option>
-                                        @endforeach                                           
-                                </select>
-                        </div>
-
-                        <div class="form-row row">
-                            <div class="form-group col-md-6">
-                                <div class="row">
-                                    <label style="font-size:13px; display:none;" id="listado_salas" for="listado_salas"><b>Listado Salas</b></label>
-                                    <select class="js-example-responsive js-example-placeholder-single js-states form-control" style=" display:none;" id="id_label_salas" required>
-                                            <option value=""></option>                              
-                                    </select>
-                                    
-                                </div>
-                            </div>  
-                            <div class="form-group col-md-6">
-                                <div class="row">
-                                    <label style="font-size:13px; display:none;" id="listado_clases" for="listado_clases"><b>Listado Clases</b></label>
-                                    <select class="js-example-responsive js-example-placeholder-single js-states form-control" style="margin-left: 0.4em;display:none;" id="id_label_clases" required>
-                                            <option value=""></option>                            
-                                    </select>
-                                </div>
-                            </div>
-                                                    
-                        </div>
-                        <div class="form-group">
-                            <label style="font-size:13px; display:none;" id="listado_monitores" for="listado_monitores"><b>Listado Monitores</b></label>
-                                <select class="js-example-responsive js-example-placeholder-single js-states form-control" style="margin-left: 0.4em;display:none;" id="id_label_monitores" required>
-                                        <option value=""></option>                            
-                                </select>
-                        </div>
-
-                        <div class="form-row row">
-                            <div class="form-group col-md-6">
-                                <div class="row">
-                                    <label style="font-size:13px" for="fecha_inicio_clase"><b>Fecha Inicio</b></label>
-                            <input class="form-control form-control-border border-width-2" type="date" placeholder="Fecha Inicio de Clase" name="fecha_inicio_clase" id="fecha_inicio_clase"  required>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <div class="row">
-                                    <label style="font-size:13px" for="fecha_fin_clase"><b>Fecha Fin </b></label>
-                                    <input class="form-control form-control-border border-width-2" style="margin-left: 0.4em;" type="date" placeholder="Fecha Fin de Clase" name="fecha_fin_clase" id="fecha_fin_clase"  required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row row">
-                            <div class="form-group col-md-6">
-                                <div class="row">
-                                    <label style="font-size:13px;" for="hora_inicio" class="col-md-6"><b>Hora Inicio</b></label>
-                                    <input class="form-control form-control-border border-width-2" type="time" placeholder="Hora Inicio" name="hora_inicio" id="hora_inicio"  required>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <div class="row">
-                                    <label style="font-size:13px;" for="hora_fin" class="col-md-6"><b>Hora Fin</b></label>
-                                    <input class="form-control form-control-border border-width-2" style="margin-left: 0.4em;" type="time" placeholder="Hora Fin" name="hora_fin" id="hora_fin" required>
-                                </div>
-                            </div>
-                        </div>
-                   </div>
-                   <hr>
-                    <div class="card-footer" style="background-color: white; padding: 0;">
-                        <button type="button" class="btn btn-secondary float-left" id="insertDataButtonClose" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary float-right" id="insertDataButton">Aceptar</button>
-                    </div>
-              
-                </form>
-                          
-            </div>
-        </div>
-    </div>
-</div>-->
-
 
 <!--Modal de Inscribirse a una Clase-->
 <div class="modal fade" id="addClassModal" tabindex="-1" role="dialog" aria-labelledby="deleteTitle" aria-hidden="true">

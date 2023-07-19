@@ -23,15 +23,28 @@ class ClasesMatriculadasController extends Controller
     }
 
     public function selectdataClaseMatriculadaGETDATA(Request $request){
-        try { 
-            $clase = DB::select("select GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ')
-            as nombregimnasio_localidad, s.nombre as nombre_sala,c.nombre as nombre_clase, cp.fecha_clase,cp.hora_inicio, 
-            cp.hora_fin,cc.fecha_registro , cp.clase_planificada_id
-            from gimnasio as g inner join sala as s on s.gimnasio_id=g.gimnasio_id inner join 
-            clases as c on c.gimnasio_id=g.gimnasio_id inner join clase_planificada as cp on c.clases_id=cp.clases_id and s.sala_id=cp.sala_id inner join
-             capacidad_clase as cc on cc.clase_planificada_id=cp.clase_planificada_id 
-             group by s.nombre,c.nombre, cp.fecha_clase,cp.hora_inicio, cp.hora_fin,cc.fecha_registro,cp.clase_planificada_id");
+        $id_gimnasio=$request->id_gimnasio;
 
+        try { 
+
+            if($id_gimnasio==""){
+                $clase = DB::select("select GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ')
+                as nombregimnasio_localidad, s.nombre as nombre_sala,c.nombre as nombre_clase, cp.fecha_clase,cp.hora_inicio, 
+                cp.hora_fin,cc.fecha_registro , cp.clase_planificada_id
+                from gimnasio as g inner join sala as s on s.gimnasio_id=g.gimnasio_id inner join 
+                clases as c on c.gimnasio_id=g.gimnasio_id inner join clase_planificada as cp on c.clases_id=cp.clases_id and s.sala_id=cp.sala_id inner join
+                capacidad_clase as cc on cc.clase_planificada_id=cp.clase_planificada_id 
+                group by s.nombre,c.nombre, cp.fecha_clase,cp.hora_inicio, cp.hora_fin,cc.fecha_registro,cp.clase_planificada_id");
+            }else{
+                $clase = DB::select("select GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ')
+                as nombregimnasio_localidad, s.nombre as nombre_sala,c.nombre as nombre_clase, cp.fecha_clase,cp.hora_inicio, 
+                cp.hora_fin,cc.fecha_registro , cp.clase_planificada_id
+                from gimnasio as g inner join sala as s on s.gimnasio_id=g.gimnasio_id inner join 
+                clases as c on c.gimnasio_id=g.gimnasio_id inner join clase_planificada as cp on c.clases_id=cp.clases_id and s.sala_id=cp.sala_id inner join
+                capacidad_clase as cc on cc.clase_planificada_id=cp.clase_planificada_id 
+                where  g.gimnasio_id=".$id_gimnasio."
+                group by s.nombre,c.nombre, cp.fecha_clase,cp.hora_inicio, cp.hora_fin,cc.fecha_registro,cp.clase_planificada_id");
+            }
             $data = array(
                 'data' => $clase
                 

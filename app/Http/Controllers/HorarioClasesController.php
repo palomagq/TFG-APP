@@ -30,26 +30,37 @@ class HorarioClasesController extends Controller
 
     public function selectdataHorarioClase(Request $request){
         //dd($ex->getMessage());
-        try { 
-            $horario_clases = DB::select(/*"select cp.clase_planificada_id,cp.fecha_clase,cp.hora_inicio,cp.hora_fin,c.nombre as nombre_clase,
-            s.nombre as nombre_sala,GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad,
-            GROUP_CONCAT(DISTINCT concat(u.nombre,' ', u.apellidos,'  ') SEPARATOR ' ') as nombreapellidos_monitor
-            FROM clase_planificada as cp left join clases as c on cp.clases_id=c.clases_id left join sala as s on cp.sala_id=s.sala_id 
-             left join gimnasio as g on c.gimnasio_id=g.gimnasio_id  left join usuario_gimnasio as ug on g.gimnasio_id=ug.gimnasio_id left join
-             usuarios as u on ug.usuarios_id=u.id left join role_user as ru on u.id=ru.user_id left join roles as r on ru.role_id=r.id
+        $id_gimnasio=$request->id_gimnasio;
 
-                group by cp.clase_planificada_id,cp.fecha_clase,cp.hora_inicio,cp.hora_fin,c.nombre,s.nombre"*/
-            "select DISTINCT cp.fecha_clase,cp.hora_inicio,cp.hora_fin,c.nombre as nombre_clase,
-            s.nombre as nombre_sala,GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad,
-            GROUP_CONCAT(DISTINCT concat(u.nombre,' ', u.apellidos,'  ') SEPARATOR ' ') as nombreapellidos_monitor,cp.clase_planificada_id
-            FROM clases as c inner join clase_planificada as cp on cp.clases_id=c.clases_id inner join sala as s on
-            s.sala_id=cp.sala_id and s.gimnasio_id=c.gimnasio_id        
-            inner join gimnasio as g on g.gimnasio_id=c.gimnasio_id and g.gimnasio_id=s.gimnasio_id
-            inner join usuarios as u on u.id=cp.monitor_id            
-            inner join role_user as ru on u.id=ru.user_id inner join roles as r on r.id=ru.role_id
-            inner join usuario_gimnasio as ug on u.id=ug.usuarios_id and ug.gimnasio_id=g.gimnasio_id     
-            where r.name='Personal'
-            group by cp.fecha_clase,cp.hora_inicio,cp.hora_fin,c.nombre,s.nombre,cp.clase_planificada_id");
+        try { 
+            if($id_gimnasio==""){
+
+                $horario_clases = DB::select(
+                "select DISTINCT cp.fecha_clase,cp.hora_inicio,cp.hora_fin,c.nombre as nombre_clase,
+                s.nombre as nombre_sala,GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad,
+                GROUP_CONCAT(DISTINCT concat(u.nombre,' ', u.apellidos,'  ') SEPARATOR ' ') as nombreapellidos_monitor,cp.clase_planificada_id
+                FROM clases as c inner join clase_planificada as cp on cp.clases_id=c.clases_id inner join sala as s on
+                s.sala_id=cp.sala_id and s.gimnasio_id=c.gimnasio_id        
+                inner join gimnasio as g on g.gimnasio_id=c.gimnasio_id and g.gimnasio_id=s.gimnasio_id
+                inner join usuarios as u on u.id=cp.monitor_id            
+                inner join role_user as ru on u.id=ru.user_id inner join roles as r on r.id=ru.role_id
+                inner join usuario_gimnasio as ug on u.id=ug.usuarios_id and ug.gimnasio_id=g.gimnasio_id     
+                where r.name='Personal'
+                group by cp.fecha_clase,cp.hora_inicio,cp.hora_fin,c.nombre,s.nombre,cp.clase_planificada_id");
+            }else{
+                $horario_clases = DB::select(
+                    "select DISTINCT cp.fecha_clase,cp.hora_inicio,cp.hora_fin,c.nombre as nombre_clase,
+                    s.nombre as nombre_sala,GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad,
+                    GROUP_CONCAT(DISTINCT concat(u.nombre,' ', u.apellidos,'  ') SEPARATOR ' ') as nombreapellidos_monitor,cp.clase_planificada_id
+                    FROM clases as c inner join clase_planificada as cp on cp.clases_id=c.clases_id inner join sala as s on
+                    s.sala_id=cp.sala_id and s.gimnasio_id=c.gimnasio_id        
+                    inner join gimnasio as g on g.gimnasio_id=c.gimnasio_id and g.gimnasio_id=s.gimnasio_id
+                    inner join usuarios as u on u.id=cp.monitor_id            
+                    inner join role_user as ru on u.id=ru.user_id inner join roles as r on r.id=ru.role_id
+                    inner join usuario_gimnasio as ug on u.id=ug.usuarios_id and ug.gimnasio_id=g.gimnasio_id     
+                    where r.name='Personal' and  g.gimnasio_id=".$id_gimnasio. "
+                    group by cp.fecha_clase,cp.hora_inicio,cp.hora_fin,c.nombre,s.nombre,cp.clase_planificada_id");
+            }
 
             $data = array(
                 'data' => $horario_clases

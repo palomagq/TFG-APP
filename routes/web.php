@@ -165,14 +165,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/selectdataHistorialdePago', 'HistorialdePagoController@selectdataHistorialdePago')->name('selectdataHistorialdePago');
 
 
-    //Evolución Ejercicios
-    Route::get('/EvolucionEjercicio', 'EvolucionEjercicioController@admin')->name('EvolucionEjercicio');
-    Route::post('/cargarTablaEjercicio', 'EvolucionEjercicioController@cargarTablaEjercicio')->name('cargarTablaEjercicio');
-    Route::post('/selectdataEvolucionEjercicios_tabla1', 'EvolucionEjercicioController@selectdataEvolucionEjercicios_tabla1')->name('selectdataEvolucionEjercicios_tabla1');
-    Route::post('/selectdataEvolucionEjercicios_tabla2', 'EvolucionEjercicioController@selectdataEvolucionEjercicios_tabla2')->name('selectdataEvolucionEjercicios_tabla2');
-    Route::post('/insertdataEvolucionEjercicio', 'EvolucionEjercicioController@insertdataEvolucionEjercicio')->name('insertdataEvolucionEjercicio');
-    Route::post('/updatedataEvolucionEjercicio', 'EvolucionEjercicioController@updatedataEvolucionEjercicio')->name('updatedataEvolucionEjercicio');
-    Route::post('/getEditarDataEvolucionEjercicio', 'EvolucionEjercicioController@getEditarDataEvolucionEjercicio')->name('getEditarDataEvolucionEjercicio');
+    //Entrenamiento Diario
+    Route::get('/EntrenamientoDiario', 'EntrenamientoDiarioController@admin')->name('EntrenamientoDiario');
+    Route::post('/cargarTablaEjercicio', 'EntrenamientoDiarioController@cargarTablaEjercicio')->name('cargarTablaEjercicio');
+    Route::post('/selectdataEntrenamientoDiario_tabla1', 'EntrenamientoDiarioController@selectdataEntrenamientoDiario_tabla1')->name('selectdataEntrenamientoDiario_tabla1');
+    Route::post('/selectdataEntrenamientoDiario_tabla2', 'EntrenamientoDiarioController@selectdataEntrenamientoDiario_tabla2')->name('selectdataEntrenamientoDiario_tabla2');
+    Route::post('/insertdataEntrenamientoDiario', 'EntrenamientoDiarioController@insertdataEntrenamientoDiario')->name('insertdataEntrenamientoDiario');
+    Route::post('/updatedataEntrenamientoDiario', 'EntrenamientoDiarioController@updatedataEntrenamientoDiario')->name('updatedataEntrenamientoDiario');
+    Route::post('/getEditarDataEntrenamientoDiario', 'EntrenamientoDiarioController@getEditarDataEntrenamientoDiario')->name('getEditarDataEntrenamientoDiario');
 
 
 
@@ -181,3 +181,7 @@ Route::group(['middleware' => 'auth'], function () {
 Auth::routes();
 
 
+    //Evolución Ejercicios
+    Route::get('/EvolucionEjercicios', 'EvolucionEjercicioController@admin')->name('EvolucionEjercicios');
+    Route::post('/selectdataEvolucionEjercicios', 'EvolucionEjercicioController@selectdataEvolucionEjercicios')->name('selectdataEvolucionEjercicios');
+    

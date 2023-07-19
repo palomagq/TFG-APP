@@ -341,22 +341,7 @@
 <script>
 
     $(document).ready( function () {
-        /*$(".js-example-basic-single").select2({
-        width: 'resolve' // need to override the changed default
-        //dropdownParent: $("#createModal")
-        });*/
-       /* $("#id_label_single").select2({
-            dropdownParent: $("#createModal")
-            //placeholder: 'Seleccione una opción'
-            
-        });*/
-
-        /*$("#id_label_single").select2({
-            dropdownParent: $("#createModal"),
-                placeholder: "Select an option",
-                allowClear: true,
-                width: '50%'
-         });*/
+        
 
          var duallistbox_gimnasio = $('select[name="duallistbox_gimnasio[]"]').bootstrapDualListbox();
          var duallistbox_gimnasio_update = $('select[name="duallistbox_gimnasio_update[]"]').bootstrapDualListbox();
@@ -372,7 +357,12 @@
                 url: "{{route('selectdata')}}",
                 type: 'post',
                 data: {
-                    "_token": $("meta[name='csrf-token']").attr("content")
+                    "_token": $("meta[name='csrf-token']").attr("content"),
+                    "id_gimnasio": function() { 
+                        console.log($('#id_gimnasio_selected_calendario').val());
+                        return $('#id_gimnasio_selected_calendario').val() 
+                    },
+
                 },
                                        
             },
@@ -604,9 +594,12 @@
             });
         }); 
 
+            //hace el rellamado y filtro del gimnasio para el admin->listener
+        $('#id_gimnasio_selected_calendario').on('change', function() {
 
-
-
+            console.log("reload")
+            datatable.ajax.reload();
+        });
 
 
         /*para el caso en el que no insertemos ni nada por ajax, por ejemplo un post de un formulario que devuelve el action*/

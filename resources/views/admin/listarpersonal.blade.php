@@ -325,7 +325,11 @@
                 url: "{{route('selectdataPersonal')}}",//'php/identidades.php',
                 type: 'post',
                 data: {
-                    "_token": $("meta[name='csrf-token']").attr("content")
+                    "_token": $("meta[name='csrf-token']").attr("content"),
+                    "id_gimnasio": function() { 
+                        console.log($('#id_gimnasio_selected_calendario').val());
+                        return $('#id_gimnasio_selected_calendario').val() 
+                    },
                 },                          
             },
             responsive: true,
@@ -516,6 +520,10 @@
             });
         }); 
 
+        $('#id_gimnasio_selected_calendario').on('change', function() {
+            console.log("reload")
+            datatable.ajax.reload();
+        });
 
 
 

@@ -36,7 +36,8 @@ class EjerciciosController extends Controller
             select e.ejercicio_id as id,e.nombre,e.ejercicioPorDefecto,ce.nombre as nombre_categoria,
             ce.categoria_ejercicio_id, 
             case when e.ejercicioPorDefecto='1' then 'Sí' else 'No' end as pordefecto
-            from ejercicio as e inner join categoria_ejercicio as ce on e.categoria_id=ce.categoria_ejercicio_id  inner join usuario_ejercicio as ue on       e.ejercicio_id=ue.ejercicio_id inner join usuarios as u on u.id=ue.usuarios_id
+            from ejercicio as e inner join categoria_ejercicio as ce on e.categoria_id=ce.categoria_ejercicio_id  inner join usuario_ejercicio as ue on 
+             e.ejercicio_id=ue.ejercicio_id inner join usuarios as u on u.id=ue.usuarios_id
             where e.ejercicioPorDefecto=0  and  u.id=ue.usuarios_id and ue.usuarios_id=".session('idUsuario')."
             group by e.ejercicio_id,e.nombre,e.ejercicioPorDefecto,ce.nombre,ce.categoria_ejercicio_id");
 

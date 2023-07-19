@@ -16,10 +16,10 @@ class HistorialdePagoController extends Controller
         Session::flash('active','HistorialdePago');
 
        $request->user()->authorizeRoles(['admin','recepción']);
-      // $gimnasios = DB::select('select * from gimnasio');
+       $gimnasios = DB::select('select * from gimnasio');
 
         
-       return view('admin.historialdepago');
+       return view('admin.historialdepago',compact('gimnasios'));
     }
 
     public function selectdataHistorialdePago(Request $request){

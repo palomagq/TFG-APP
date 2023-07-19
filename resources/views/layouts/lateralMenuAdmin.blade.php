@@ -2,7 +2,7 @@
 
     <a href="{{route('listarusuarios')}}" class="brand-link">
         <!--<img src="" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: 0.8;" />-->
-        <span class="brand-text font-weight-light">FitEnerGym</span>
+        <span class="brand-text font-weight-light" style="margin-left:1em;">FitEnerGym</span>
     </a>
 
     <div class="sidebar">
@@ -265,7 +265,7 @@
                                             @else
                                                 class="nav-link"
                                             @endif>
-                                                <i class="nav-icon fas fa-copy"></i>
+                                                <i class="nav-icon fa-solid fa-list"></i>
                                                 <p>
                                                     Clases
                                                 <i class="fas fa-angle-left right"></i>
@@ -303,8 +303,8 @@
                                             @else
                                                 class="nav-link"
                                             @endif>
-                                                <i class="nav-icon fas fa-copy"></i>
-                                                <p>
+                                            <i class="nav-icon fa-solid fa-list"></i>
+                                            <p>
                                                     Salas
                                                 <i class="fas fa-angle-left right"></i>
                                                 <!-- <span class="badge badge-info right">6</span>-->
@@ -393,7 +393,7 @@
                                                 @else
                                                     class="nav-link"
                                                 @endif>
-                                                <i class="nav-icon fas fa-copy"></i>
+                                                <i class="nav-icon fa-solid fa-list"></i>
                                                 <p>
                                                     Clases Matriculadas
                                                 <i class="fas fa-angle-left right"></i>
@@ -433,7 +433,7 @@
                                                 @else
                                                     class="nav-link"
                                                 @endif>
-                                                <i class="nav-icon fas fa-copy"></i>
+                                                <i class="nav-icon fa-solid fa-list"></i>
                                                 <p>
                                                     Categoria de Ejercicios
                                                 <i class="fas fa-angle-left right"></i>
@@ -470,8 +470,8 @@
                                             @else
                                                 class="nav-link"
                                             @endif>
-                                                <i class="nav-icon fas fa-copy"></i>
-                                                <p>
+                                            <i class="nav-icon fa-solid fa-list"></i>
+                                            <p>
                                                     Tipos de Ejercicios
                                                 <i class="fas fa-angle-left right"></i>
                                                 <!-- <span class="badge badge-info right">6</span>-->
@@ -498,14 +498,14 @@
                                     @if((Session('idRole') == 1) || (Session('idRole') == 4) || (Session('idRole') == 5))
 
                                         <li 
-                                            @if(session('active')=='TabladeEjercicios' || session('active')=='Ejercicios' || session('active')=='EvolucionEjercicio')
+                                            @if(session('active')=='TabladeEjercicios' || session('active')=='Ejercicios' )
                                                 class="nav-item menu-is-opening menu-open"
                                             @else
                                                 class="nav-item"
                                             @endif
                                         >
                                             <a href="#" 
-                                                @if(session('active')=='TabladeEjercicios' || session('active')=='Ejercicios'  || session('active')=='EvolucionEjercicio')
+                                                @if(session('active')=='TabladeEjercicios' || session('active')=='Ejercicios'  )
                                                     class="nav-link active"
                                                 @else
                                                     class="nav-link"
@@ -546,21 +546,64 @@
                                                         <p>Listado de Tablas de Ejercicios</p>
                                                     </a>
                                                 </li>                                         
-                                                <li class="nav-item">
-                                                    <a href="{{route('EvolucionEjercicio')}}" 
-                                                        @if(session('active')=='EvolucionEjercicio')
-                                                            class="nav-link active"
-                                                        @else
-                                                            class="nav-link"
-                                                        @endif>
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>Evolución de Ejercicios</p>
-                                                    </a>
-                                                </li>        
+                                                    
                                                 
                                             </ul>
                                         </li>
                                     @endif
+
+                                    @if((Session('idRole') == 1) || (Session('idRole') == 4) || (Session('idRole') == 5))
+
+                                    <li 
+                                        @if(session('active')=='EntrenamientoDiario' || session('active')=='EvolucionEjercicios' )
+                                            class="nav-item menu-is-opening menu-open"
+                                        @else
+                                            class="nav-item"
+                                        @endif
+                                    >
+                                        <a href="#" 
+                                            @if(session('active')=='EntrenamientoDiario' || session('active')=='EvolucionEjercicios')
+                                                class="nav-link active"
+                                            @else
+                                                class="nav-link"
+                                            @endif
+                                        >
+                                            <i class="nav-icon fa-solid fa-person-walking"></i>
+                                            <p>
+                                                Entrenamientos
+                                            <i class="fas fa-angle-left right"></i>
+                                            <!-- <span class="badge badge-info right">6</span>-->
+                                            </p>
+                                        </a>
+                                        <ul class="nav nav-treeview">
+                                       
+                                                                                 
+                                            <li class="nav-item">
+                                                <a href="{{route('EntrenamientoDiario')}}" 
+                                                    @if(session('active')=='EntrenamientoDiario')
+                                                        class="nav-link active"
+                                                    @else
+                                                        class="nav-link"
+                                                    @endif>
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>Entrenamiento Diario</p>
+                                                </a>
+                                            </li>      
+                                            <li class="nav-item">
+                                                <a href="{{route('EvolucionEjercicios')}}" 
+                                                    @if(session('active')=='EvolucionEjercicios')
+                                                        class="nav-link active"
+                                                    @else
+                                                        class="nav-link"
+                                                    @endif>
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>Evolución de Ejercicios</p>
+                                                </a>
+                                            </li>    
+                                            
+                                        </ul>
+                                    </li>
+                                @endif
 
                                     @if((Session('idRole') == 1) || (Session('idRole') == 2) || (Session('idRole') == 3))
 

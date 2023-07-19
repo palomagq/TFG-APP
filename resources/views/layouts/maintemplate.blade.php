@@ -98,21 +98,43 @@
                     <li class="nav-item">
                         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                     </li>
-                    <li class="nav-item d-none d-sm-inline-block">
+                    <li class="nav-item  d-sm-inline-block">
                         <a href="#" class="nav-link">Home</a>
                     </li>
-                    <li class="nav-item d-none d-sm-inline-block">
+                    <li class="nav-item d-sm-inline-block">
                         <a  href="{{ route('logout') }}" class="nav-link"  onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">Logout</a>
                     </li>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="">
                         @csrf
                     </form>
+                    @if(Session('idRole') == 1 && isset($gimnasios))
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col">
+                                        <select class="js-example-responsive js-example-placeholder-single js-states form-control"
+                                            id="id_gimnasio_selected_calendario" style="border-color: black; " required> <!-- style="margin-bottom:2em;margin-left: -16em;"-->
+                                                <option value=""></option>
+                                                @foreach($gimnasios as $g)
+                                                    <option  value="{{$g->gimnasio_id}}">{{$g->nombre}} - {{$g->localidad}}</option>
+                                                @endforeach       
+                                        </select>
+                                </div>
+                            </div>
+                        </div>
+                @else
+                  <div style="margin-left: 1em; margin-top:0.3em;">
+                    <p>Perteneces al gimnasio <b>{{Session('id_user_gimnasio')}}</b></p>
+                  </div>
+                @endif
                   
                 </ul>
-
+                
                 
             </nav>
+
+            
+
 
             <aside class="main-sidebar sidebar-dark-primary elevation-4">
                 @include('layouts.lateralMenuAdmin')
