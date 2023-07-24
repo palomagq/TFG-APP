@@ -185,3 +185,4 @@ Auth::routes();
     Route::get('/EvolucionEjercicios', 'EvolucionEjercicioController@admin')->name('EvolucionEjercicios');
     Route::post('/selectdataEvolucionEjercicios', 'EvolucionEjercicioController@selectdataEvolucionEjercicios')->name('selectdataEvolucionEjercicios');
     
+    Route::get('/send-mail', 'MailSender@sendEmailTest')->name('send-mail');
