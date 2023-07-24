@@ -8,7 +8,7 @@
 
             <div class="card mt-2">
                 <div class="card-header">
-                    <h3 class="card-title">Listado del Personal</h3>
+                    <h3 class="card-title">Listado de Monitores</h3>
                 </div>
 
                 <div class="card-body">

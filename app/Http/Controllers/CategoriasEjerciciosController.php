@@ -15,7 +15,7 @@ class CategoriasEjerciciosController extends Controller
     public function admin(Request $request){
         Session::flash('active','CategoriaEjercicios');
 
-        $request->user()->authorizeRoles(['admin']);
+        $request->user()->authorizeRoles(['admin','personal','socio']);
         //$gimnasios = DB::select('select * from gimnasio');
         
         return view('admin.listarcategoriasejercicios');
@@ -23,9 +23,24 @@ class CategoriasEjerciciosController extends Controller
 
      public function selectdataCategoriaEjercicios(Request $request){
         try { 
-            $categoria = DB::select("select ce.categoria_ejercicio_id as id,ce.nombre
-            from categoria_ejercicio as ce 
-            group by ce.nombre,ce.categoria_ejercicio_id");
+            $categoria = DB::select("select DISTINCT ce.categoria_ejercicio_id as id,ce.nombre,ce.usuario_id from categoria_ejercicio as ce 
+            where ce.usuario_id=".Session('idUsuario'). "
+
+            union
+
+            select DISTINCT ce.categoria_ejercicio_id as id,ce.nombre,ce.usuario_id from categoria_ejercicio as ce 
+            inner join usuarios as u on ce.usuario_id=u.id inner join role_user as ru on u.id=ru.user_id inner join roles as r
+             on ru.role_id=r.id where r.name='Personal'
+
+             union
+
+             select DISTINCT ce.categoria_ejercicio_id as id,ce.nombre,ce.usuario_id from categoria_ejercicio as ce 
+             inner join usuarios as u on ce.usuario_id=u.id inner join role_user as ru on u.id=ru.user_id inner join roles as r
+              on ru.role_id=r.id where r.name='Admin'
+ 
+            
+            "
+            );
 
             $data = array(
                 'data' => $categoria

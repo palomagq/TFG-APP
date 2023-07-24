@@ -92,6 +92,19 @@
                                             @endforeach                                        
                                     </select>
                         </div>
+
+                        @if((Session('idRole') == 1) || (Session('idRole') == 4))
+                            <div class="form-group">
+                                <label style="font-size:13px" for="listado_socio"><b>Listado de Socios</b></label>
+                             
+                                    <select multiple="multiple" id="duallistbox_socio[]" name="duallistbox_socio[]" title="duallistbox_socio[]">
+                                        @foreach($socios as $s)
+                                                <option value="{{$s->id}}">{{$s->nombre}}  {{$s->apellidos}}</option>
+                                            @endforeach          
+                                      </select>
+                                
+                            </div>
+                        @endif
                       
                    </div>
                    
@@ -221,7 +234,8 @@
 
 $(document).ready( function () {
 
-      
+        var duallistbox_socio = $('select[name="duallistbox_socio[]"]').bootstrapDualListbox();
+         //var duallistbox_socio_update = $('select[name="duallistbox_gimnasio_update[]"]').bootstrapDualListbox();
         //selectdata
 
         var datatable = $('#table_id').DataTable({
@@ -346,6 +360,8 @@ $(document).ready( function () {
                     _token:'{{ csrf_token() }}',
                     nombre_rutina_ejercicio: $("#nombreTablaEjercicio").val(),
                     id_label_ejercicio: $("#id_label_ejercicio").val(),
+                    socio_id: $('select[name="duallistbox_socio[]"]').val(),
+
 
                 },
                 success: function(dataResult){

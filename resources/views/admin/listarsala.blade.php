@@ -253,35 +253,71 @@
             } 
         } );
 
-        var data = null
-        $('#table_id tbody').on('click', 'tr', function () {
-            data = datatable.row(this).data();
-            datatable.row(this).index
-            
-            $.ajax({
-                url: "{{route('getEditarDataSala')}}",
-                type: "POST",
-                cache: false,
-                data:{
-                    _token:'{{ csrf_token() }}',
-                    id: data["id"]
-                },
-                success: function(dataResult){
-                    console.log(dataResult)
-                    dataJson=JSON.parse(dataResult)
-                    document.getElementById('nombreEditar').value=dataJson[0]["nombre"];
-                    document.getElementById('capacidadEditar').value=dataJson[0]["capacidad"];
-                    $("#id_gimnasio_selected_update").val(dataJson[0]["gimnasio_id"]) 
+        //edit data
+        @if((Session('idRole') != 5) && (Session('idRole') != 4) )
+            var data = null
+            $('#table_id tbody').on('click', 'tr', function () {
+                data = datatable.row(this).data();
+                datatable.row(this).index
+                
+                $.ajax({
+                    url: "{{route('getEditarDataSala')}}",
+                    type: "POST",
+                    cache: false,
+                    data:{
+                        _token:'{{ csrf_token() }}',
+                        id: data["id"]
+                    },
+                    success: function(dataResult){
+                        console.log(dataResult)
+                        dataJson=JSON.parse(dataResult)
+                        document.getElementById('nombreEditar').value=dataJson[0]["nombre"];
+                        document.getElementById('capacidadEditar').value=dataJson[0]["capacidad"];
+                        $("#id_gimnasio_selected_update").val(dataJson[0]["gimnasio_id"]) 
 
-                    $('#updateModal').modal('show');
-                    
-                },
-                error: function(e){
-                    console.log(e)
-                }
+                        $('#updateModal').modal('show');
+                        
+                    },
+                    error: function(e){
+                        console.log(e)
+                    }
+                });
             });
-        });
 
+                //updatedata
+                $("#updateDataButton").click(function(){
+                $.ajax({
+                    url: "{{route('updatedataSala')}}",
+                    type: "POST",
+                    cache: false,
+                    data:{
+                        _token:'{{ csrf_token() }}',
+                        nombre: $('#nombreEditar').val(),
+                        capacidad: $('#capacidadEditar').val(),
+                        nombregimnasio_localidad: $("#id_gimnasio_selected_update").val(),
+                        id: data["id"]
+
+                    },
+                // $(".js-example-disabled").select2();
+
+                    success: function(dataResult){
+                        //console.log(dataResult)
+                        if(dataResult["code"]==200){
+                            msgSuccess(dataResult["msg"])
+                            $('#UpdateDataButtonClose').click();
+                            datatable.ajax.reload();
+                        }else{
+                            msgError(dataResult["msg"])
+                        }         
+                    
+                    },
+                    error: function(e){
+                        console.log(e)
+                        msgError("Error genérico. Por favor, inténtelo más tarde.")
+                    }
+                });
+            }); 
+        @endif
 
         //deletedata
         $("#DeleteDataButton").click(function(){
@@ -349,39 +385,7 @@
             });
         }); 
 
-        //updatedata
-        $("#updateDataButton").click(function(){
-            $.ajax({
-                url: "{{route('updatedataSala')}}",
-                type: "POST",
-                cache: false,
-                data:{
-                    _token:'{{ csrf_token() }}',
-                    nombre: $('#nombreEditar').val(),
-                    capacidad: $('#capacidadEditar').val(),
-                    nombregimnasio_localidad: $("#id_gimnasio_selected_update").val(),
-                    id: data["id"]
-
-                },
-               // $(".js-example-disabled").select2();
-
-                success: function(dataResult){
-                    //console.log(dataResult)
-                    if(dataResult["code"]==200){
-                        msgSuccess(dataResult["msg"])
-                        $('#UpdateDataButtonClose').click();
-                        datatable.ajax.reload();
-                    }else{
-                        msgError(dataResult["msg"])
-                    }         
-                
-                },
-                error: function(e){
-                    console.log(e)
-                    msgError("Error genérico. Por favor, inténtelo más tarde.")
-                }
-            });
-        }); 
+  
 
 
 

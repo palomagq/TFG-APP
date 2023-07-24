@@ -23,7 +23,31 @@ class ClasesController extends Controller
         $id_gimnasio=$request->id_gimnasio;
 
         try { 
-            if($id_gimnasio==""){
+
+            if((Session('idRole') == 2) || (Session('idRole') == 3) || (Session('idRole') == 4)){
+                $clase = DB::select("select c.clases_id as id,c.nombre,
+                GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad 
+                from clases as c left join gimnasio as g on c.gimnasio_id=g.gimnasio_id
+                where g.gimnasio_id=".Session('id_gimnasio'). " 
+                group by c.nombre,c.clases_id");
+
+            }else if((Session('idRole') == 1) && ($id_gimnasio != "")){
+                $clase = DB::select("select c.clases_id as id,c.nombre,
+                GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad 
+                from clases as c left join gimnasio as g on c.gimnasio_id=g.gimnasio_id
+                where g.gimnasio_id=".$id_gimnasio. " 
+                group by c.nombre,c.clases_id");
+
+            }else{
+                $clase = DB::select("select c.clases_id as id,c.nombre,
+                GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad 
+                from clases as c left join gimnasio as g on c.gimnasio_id=g.gimnasio_id
+                
+                group by c.nombre,c.clases_id");
+            }
+
+
+            /*if($id_gimnasio==""){
                 $clase = DB::select("select c.clases_id as id,c.nombre,
                 GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad 
                 from clases as c left join gimnasio as g on c.gimnasio_id=g.gimnasio_id
@@ -35,7 +59,7 @@ class ClasesController extends Controller
                 from clases as c left join gimnasio as g on c.gimnasio_id=g.gimnasio_id
                 where g.gimnasio_id=".$id_gimnasio. " 
                 group by c.nombre,c.clases_id");
-            }
+            }*/
             $data = array(
                 'data' => $clase
                 

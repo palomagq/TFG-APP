@@ -23,7 +23,36 @@ class SociosController extends Controller
         $id_gimnasio=$request->id_gimnasio;
 
         try{
-            if($id_gimnasio==""){
+
+
+            if((Session('idRole') == 2) || (Session('idRole') == 3) || (Session('idRole') == 4)){
+                $socios = DB::select("select u.id,u.nombre,u.apellidos,u.dni,u.usersname,u.email,u.telefono,u.fechaNac,
+                case when u.sexo=0 then 'Mujer' else 'Hombre' end as sexo_nombre,
+                GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad 
+                from usuarios as u left join role_user as ru on u.id=ru.user_id left join roles as r on ru.role_id=r.id
+                left join usuario_gimnasio as ug on u.id=ug.usuarios_id left join gimnasio as g on ug.gimnasio_id=g.gimnasio_id
+                where r.name='Socio' and  g.gimnasio_id=".Session('id_gimnasio'). "
+                group by u.id,u.nombre,u.apellidos,u.dni,u.usersname,u.email,u.telefono,u.fechaNac,u.sexo");
+
+            }else if((Session('idRole') == 1) && ($id_gimnasio != "")){
+                $socios = DB::select("select u.id,u.nombre,u.apellidos,u.dni,u.usersname,u.email,u.telefono,u.fechaNac,
+                case when u.sexo=0 then 'Mujer' else 'Hombre' end as sexo_nombre,
+                GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad 
+                from usuarios as u left join role_user as ru on u.id=ru.user_id left join roles as r on ru.role_id=r.id
+                left join usuario_gimnasio as ug on u.id=ug.usuarios_id left join gimnasio as g on ug.gimnasio_id=g.gimnasio_id
+                where r.name='Socio' and  g.gimnasio_id=".$id_gimnasio. "
+                group by u.id,u.nombre,u.apellidos,u.dni,u.usersname,u.email,u.telefono,u.fechaNac,u.sexo");
+
+            }else{
+                $socios = DB::select("select u.id,u.nombre,u.apellidos,u.dni,u.usersname,u.email,u.telefono,u.fechaNac,
+                case when u.sexo=0 then 'Mujer' else 'Hombre' end as sexo_nombre,
+                GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad 
+                from usuarios as u left join role_user as ru on u.id=ru.user_id left join roles as r on ru.role_id=r.id
+                left join usuario_gimnasio as ug on u.id=ug.usuarios_id left join gimnasio as g on ug.gimnasio_id=g.gimnasio_id
+                where r.name='Socio' 
+                group by u.id,u.nombre,u.apellidos,u.dni,u.usersname,u.email,u.telefono,u.fechaNac,u.sexo");
+            }
+            /*if($id_gimnasio==""){
                 $socios = DB::select("select u.id,u.nombre,u.apellidos,u.dni,u.usersname,u.email,u.telefono,u.fechaNac,
                 case when u.sexo=0 then 'Mujer' else 'Hombre' end as sexo_nombre,
                 GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad 
@@ -39,7 +68,7 @@ class SociosController extends Controller
                 left join usuario_gimnasio as ug on u.id=ug.usuarios_id left join gimnasio as g on ug.gimnasio_id=g.gimnasio_id
                 where r.name='Socio' and  g.gimnasio_id=".$id_gimnasio. "
                 group by u.id,u.nombre,u.apellidos,u.dni,u.usersname,u.email,u.telefono,u.fechaNac,u.sexo");
-            }
+            }*/
             $data = array(
                 'data' => $socios
                 

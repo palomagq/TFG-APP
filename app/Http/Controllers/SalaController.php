@@ -23,7 +23,33 @@ class SalaController extends Controller
         $id_gimnasio=$request->id_gimnasio;
 
         try { 
-            if($id_gimnasio==""){
+
+            if((Session('idRole') == 2) || (Session('idRole') == 3) || (Session('idRole') == 4)){
+                $sala = DB::select("select s.sala_id as id,s.nombre,s.capacidad, 
+                GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad 
+                from sala as s left join gimnasio as g on s.gimnasio_id=g.gimnasio_id
+                where g.gimnasio_id=".Session('id_gimnasio'). "
+                group by s.nombre,s.capacidad,s.sala_id");
+
+            }else if((Session('idRole') == 1) && ($id_gimnasio != "")){
+                $sala = DB::select("select s.sala_id as id,s.nombre,s.capacidad, 
+                GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad 
+                from sala as s left join gimnasio as g on s.gimnasio_id=g.gimnasio_id
+                where g.gimnasio_id=".$id_gimnasio. "
+                group by s.nombre,s.capacidad,s.sala_id");
+
+            }else{
+                $sala = DB::select("select s.sala_id as id,s.nombre,s.capacidad, 
+                GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad 
+                from sala as s left join gimnasio as g on s.gimnasio_id=g.gimnasio_id
+                
+                group by s.nombre,s.capacidad,s.sala_id");
+            }
+
+
+
+
+            /*if($id_gimnasio==""){
                 $sala = DB::select("select s.sala_id as id,s.nombre,s.capacidad, 
                 GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad 
                 from sala as s left join gimnasio as g on s.gimnasio_id=g.gimnasio_id
@@ -35,7 +61,7 @@ class SalaController extends Controller
                 from sala as s left join gimnasio as g on s.gimnasio_id=g.gimnasio_id
                 where g.gimnasio_id=".$id_gimnasio. "
                 group by s.nombre,s.capacidad,s.sala_id");
-            }
+            }*/
             $data = array(
                 'data' => $sala
                 

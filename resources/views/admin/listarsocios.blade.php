@@ -365,56 +365,103 @@
             } 
         } );
 
-        var data = null
-        $('#table_id tbody').on('click', 'tr', function () {
-            data = datatable.row(this).data();
-            datatable.row(this).index
-            //console.log( datatable.row(this).hasClass('testCVs'));
-             //console.log(data)
-            //alert('You clicked on ' + data["id"] + "'s row");
-            $.ajax({
-                url: "{{route('getEditarDataSocios')}}",
-                type: "POST",
-                cache: false,
-                data:{
-                    _token:'{{ csrf_token() }}',
-                    id: data["id"]
-                },
-                success: function(dataResult){
+        
 
-                    $('select[name="duallistbox_gimnasio_update[]"] > option').each(function() {
-                        $(this).prop("selected", false)
-                    });
+        //edit data
+        @if((Session('idRole') != 5) && (Session('idRole') != 4) )
 
-                    console.log(dataResult)
-                    //console.log(dataResult[0])
-                    dataJson=JSON.parse(dataResult)
-                    document.getElementById('nombreEditar').value=dataJson[0][0]["nombre"];
-                    document.getElementById('apellidosEditar').value=dataJson[0][0]["apellidos"];
-                    document.getElementById('dniEditar').value=dataJson[0][0]["dni"];
-                    $("#id_selected_sexo_update").val(dataJson[0][0]["sexo"])  
-                    document.getElementById('emailEditar').value=dataJson[0][0]["email"];
-                    document.getElementById('telefonoEditar').value=dataJson[0][0]["telefono"];
-                    document.getElementById('fechaNacEditar').value=dataJson[0][0]["fechaNac"];
-                    document.getElementById('usersnameEditar').value=dataJson[0][0]["usersname"];
-                    
-                    $('select[name="duallistbox_gimnasio_update[]"] > option').each(function() {
-                        console.log( $(this).val())
-                        for(i=0;i<dataJson[1].length;i++){
-                            if($(this).val()==dataJson[1][i]["gimnasio_id"])
-                                $(this).prop("selected", true)
-                        }
+            var data = null
+            $('#table_id tbody').on('click', 'tr', function () {
+                data = datatable.row(this).data();
+                datatable.row(this).index
+                //console.log( datatable.row(this).hasClass('testCVs'));
+                //console.log(data)
+                //alert('You clicked on ' + data["id"] + "'s row");
+                $.ajax({
+                    url: "{{route('getEditarDataSocios')}}",
+                    type: "POST",
+                    cache: false,
+                    data:{
+                        _token:'{{ csrf_token() }}',
+                        id: data["id"]
+                    },
+                    success: function(dataResult){
+
+                        $('select[name="duallistbox_gimnasio_update[]"] > option').each(function() {
+                            $(this).prop("selected", false)
+                        });
+
+                        console.log(dataResult)
+                        //console.log(dataResult[0])
+                        dataJson=JSON.parse(dataResult)
+                        document.getElementById('nombreEditar').value=dataJson[0][0]["nombre"];
+                        document.getElementById('apellidosEditar').value=dataJson[0][0]["apellidos"];
+                        document.getElementById('dniEditar').value=dataJson[0][0]["dni"];
+                        $("#id_selected_sexo_update").val(dataJson[0][0]["sexo"])  
+                        document.getElementById('emailEditar').value=dataJson[0][0]["email"];
+                        document.getElementById('telefonoEditar').value=dataJson[0][0]["telefono"];
+                        document.getElementById('fechaNacEditar').value=dataJson[0][0]["fechaNac"];
+                        document.getElementById('usersnameEditar').value=dataJson[0][0]["usersname"];
                         
-                    });
+                        $('select[name="duallistbox_gimnasio_update[]"] > option').each(function() {
+                            console.log( $(this).val())
+                            for(i=0;i<dataJson[1].length;i++){
+                                if($(this).val()==dataJson[1][i]["gimnasio_id"])
+                                    $(this).prop("selected", true)
+                            }
+                            
+                        });
 
-                    duallistbox_gimnasio_update.bootstrapDualListbox('refresh');
-                    $('#updateModal').modal('show');
-                },
-                error: function(e){
-                    console.log(e)
-                }
+                        duallistbox_gimnasio_update.bootstrapDualListbox('refresh');
+                        $('#updateModal').modal('show');
+                    },
+                    error: function(e){
+                        console.log(e)
+                    }
+                });
             });
-        });
+
+
+            //updatedata
+            $("#updateDataButton").click(function(){
+                $.ajax({
+                    url: "{{route('updatedataSocios')}}",
+                    type: "POST",
+                    cache: false,
+                    data:{
+                        _token:'{{ csrf_token() }}',
+                        nombre: $('#nombreEditar').val(),
+                        apellidos: $('#apellidosEditar').val(),
+                        dni: $('#dniEditar').val(),
+                        usersname: $('#usersnameEditar').val(),
+                        sexo: $('#id_selected_sexo_update').val(),
+                        email: $('#emailEditar').val(),
+                        telefono: $('#telefonoEditar').val(),
+                        fechaNac: $('#fechaNacEditar').val(),
+                        gimnasio_id: $('select[name="duallistbox_gimnasio_update[]"]').val(),
+                        id: data["id"]
+
+                    },
+                // $(".js-example-disabled").select2();
+
+                    success: function(dataResult){
+                        //console.log(dataResult)
+                        if(dataResult["code"]==200){
+                            msgSuccess(dataResult["msg"])
+                            $('#UpdateDataButtonClose').click();
+                            datatable.ajax.reload();
+                        }else{
+                            msgError(dataResult["msg"])
+                        }         
+                    
+                    },
+                    error: function(e){
+                        console.log(e)
+                        msgError("Error genérico. Por favor, inténtelo más tarde.")
+                    }
+                });
+            }); 
+        @endif
 
 
         //deletedata
@@ -503,46 +550,7 @@
             }
         }); 
 
-        //updatedata
-        $("#updateDataButton").click(function(){
-            $.ajax({
-                url: "{{route('updatedataSocios')}}",
-                type: "POST",
-                cache: false,
-                data:{
-                    _token:'{{ csrf_token() }}',
-                    nombre: $('#nombreEditar').val(),
-                    apellidos: $('#apellidosEditar').val(),
-                    dni: $('#dniEditar').val(),
-                    usersname: $('#usersnameEditar').val(),
-                    sexo: $('#id_selected_sexo_update').val(),
-                    email: $('#emailEditar').val(),
-                    telefono: $('#telefonoEditar').val(),
-                    fechaNac: $('#fechaNacEditar').val(),
-                    gimnasio_id: $('select[name="duallistbox_gimnasio_update[]"]').val(),
-                    id: data["id"]
-
-                },
-               // $(".js-example-disabled").select2();
-
-                success: function(dataResult){
-                    //console.log(dataResult)
-                    if(dataResult["code"]==200){
-                        msgSuccess(dataResult["msg"])
-                        $('#UpdateDataButtonClose').click();
-                        datatable.ajax.reload();
-                    }else{
-                        msgError(dataResult["msg"])
-                    }         
-                
-                },
-                error: function(e){
-                    console.log(e)
-                    msgError("Error genérico. Por favor, inténtelo más tarde.")
-                }
-            });
-        }); 
-
+      
 
 
     //hace el rellamado y filtro del gimnasio para el admin->listener

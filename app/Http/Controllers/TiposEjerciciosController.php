@@ -15,7 +15,7 @@ class TiposEjerciciosController extends Controller
     public function admin(Request $request){
         Session::flash('active','TipoEjercicios');
 
-        $request->user()->authorizeRoles(['admin']);
+        $request->user()->authorizeRoles(['admin','personal','socio']);
         //$gimnasios = DB::select('select * from gimnasio');
         
         return view('admin.listartipoejercicios');

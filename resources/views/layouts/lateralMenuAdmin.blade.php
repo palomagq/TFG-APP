@@ -95,7 +95,7 @@
 
                                     
 
-                                    @if((Session('idRole') == 1) || (Session('idRole') == 2))
+                                    @if((Session('idRole') == 1) || (Session('idRole') == 2) ||  (Session('idRole') == 3))
 
                                         <li 
                                         @if(session('active')=='Personal')
@@ -111,7 +111,7 @@
                                             @endif>
                                                 <i class="nav-icon fa-solid fa-user"></i>
                                                 <p>
-                                                    Personal
+                                                    Monitor
                                                 <i class="fas fa-angle-left right"></i>
                                                 <!-- <span class="badge badge-info right">6</span>-->
                                                 </p>
@@ -125,7 +125,7 @@
                                                         class="nav-link"
                                                     @endif>
                                                         <i class="far fa-circle nav-icon"></i>
-                                                        <p>Listado de Personal</p>
+                                                        <p>Listado de Monitores</p>
                                                     </a>
                                                 </li>       
                                                 
@@ -422,7 +422,7 @@
                                     @if((Session('idRole') == 1) || (Session('idRole') == 4) || (Session('idRole') == 5))
 
                                         <li 
-                                            @if(session('active')=='CategoriaEjercicios' )
+                                            @if(session('active') == 'CategoriaEjercicios' )
                                                 class="nav-item menu-is-opening menu-open"
                                             @else
                                                 class="nav-item"

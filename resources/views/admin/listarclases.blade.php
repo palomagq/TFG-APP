@@ -247,36 +247,70 @@
         } );
 
         //edit data
+        @if((Session('idRole') != 5) && (Session('idRole') != 4) )
 
-        var data = null  
-        $('#table_id tbody').on('click', 'tr', function () {
-            data = datatable.row(this).data();
-            datatable.row(this).index
-            //console.log(data["id"])
+            var data = null  
+            $('#table_id tbody').on('click', 'tr', function () {
+                data = datatable.row(this).data();
+                datatable.row(this).index
+                //console.log(data["id"])
 
-            $.ajax({
-                url: "{{route('getEditarDataClase')}}",
-                type: "POST",
-                cache: false,
-                data:{
-                    _token:'{{ csrf_token() }}',
-                    id: data["id"]
-                },
-                success: function(dataResult){
-                    console.log(dataResult)
-                    //console.log(dataResult[0])
-                    dataJson=JSON.parse(dataResult)
-                    document.getElementById('nombreEditar').value=dataJson[0]["nombre"];
-                    $("#id_gimnasio_selected_update").val(dataJson[0]["gimnasio_id"])
+                $.ajax({
+                    url: "{{route('getEditarDataClase')}}",
+                    type: "POST",
+                    cache: false,
+                    data:{
+                        _token:'{{ csrf_token() }}',
+                        id: data["id"]
+                    },
+                    success: function(dataResult){
+                        console.log(dataResult)
+                        //console.log(dataResult[0])
+                        dataJson=JSON.parse(dataResult)
+                        document.getElementById('nombreEditar').value=dataJson[0]["nombre"];
+                        $("#id_gimnasio_selected_update").val(dataJson[0]["gimnasio_id"])
 
-                    $('#updateModal').modal('show');
-                    
-                },
-                error: function(e){
-                    console.log(e)
-                }
+                        $('#updateModal').modal('show');
+                        
+                    },
+                    error: function(e){
+                        console.log(e)
+                    }
+                });
             });
-        });
+
+            //updatedata
+            $("#updateDataButton").click(function(){
+                $.ajax({
+                    url: "{{route('updatedataClase')}}",
+                    type: "POST",
+                    cache: false,
+                    data:{
+                        _token:'{{ csrf_token() }}',
+                        nombre: $('#nombreEditar').val(),
+                        nombregimnasio_localidad: $("#id_gimnasio_selected_update").val(),
+                        id: data["id"]
+
+                    },
+
+                    success: function(dataResult){
+                        //console.log(dataResult)
+                        if(dataResult["code"]==200){
+                            msgSuccess(dataResult["msg"])
+                            $('#UpdateDataButtonClose').click();
+                            datatable.ajax.reload();
+                        }else{
+                            msgError(dataResult["msg"])
+                        }         
+                    
+                    },
+                    error: function(e){
+                        console.log(e)
+                        msgError("Error genérico. Por favor, inténtelo más tarde.")
+                    }
+                });
+            }); 
+        @endif
 
 
         //deletedata
@@ -344,37 +378,7 @@
             
         }); 
 
-        //updatedata
-        $("#updateDataButton").click(function(){
-            $.ajax({
-                url: "{{route('updatedataClase')}}",
-                type: "POST",
-                cache: false,
-                data:{
-                    _token:'{{ csrf_token() }}',
-                    nombre: $('#nombreEditar').val(),
-                    nombregimnasio_localidad: $("#id_gimnasio_selected_update").val(),
-                    id: data["id"]
-
-                },
-
-                success: function(dataResult){
-                    //console.log(dataResult)
-                    if(dataResult["code"]==200){
-                        msgSuccess(dataResult["msg"])
-                        $('#UpdateDataButtonClose').click();
-                        datatable.ajax.reload();
-                    }else{
-                        msgError(dataResult["msg"])
-                    }         
-                
-                },
-                error: function(e){
-                    console.log(e)
-                    msgError("Error genérico. Por favor, inténtelo más tarde.")
-                }
-            });
-        }); 
+       
 
 
     //hace el rellamado y filtro del gimnasio para el admin->listener

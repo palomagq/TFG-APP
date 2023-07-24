@@ -35,14 +35,28 @@
 </div>
 
 
-<div>
 
-    <div class="floating-container">
-        <div class="floating-button btn btn-success" type="reset" data-toggle="modal" data-target="#createModal">
-            +
+@if((Session('idRole') == 1 ) || (Session('idRole') == 2 )  || (Session('idRole') == 3 ) || (Session('idRole') == 4 ))
+
+    <div>
+        <div class="floating-container">
+            <div class="floating-button btn btn-success" type="reset" data-toggle="modal" data-target="#createModal">
+                +
+            </div>
+        </div> 
+    </div>
+
+@else
+    <div  style="display: none">
+        <div class="floating-container">
+            <div class="floating-button btn btn-success" type="reset" data-toggle="modal" data-target="#createModal">
+                +
+            </div>
         </div>
-    </div>  
-</div>
+    </div>
+
+@endif 
+
 
 @endsection
 
@@ -212,34 +226,69 @@ $(document).ready( function () {
  
          //edit data
  
-         var data = null  
-         $('#table_id tbody').on('click', 'tr', function () {
-             data = datatable.row(this).data();
-             datatable.row(this).index
-             //console.log(data["id"])
- 
-             $.ajax({
-                 url: "{{route('getEditarDataTipoEjercicios')}}",
-                 type: "POST",
-                 cache: false,
-                 data:{
-                     _token:'{{ csrf_token() }}',
-                     id: data["id"]
-                 },
-                 success: function(dataResult){
-                     console.log(dataResult)
-                     //console.log(dataResult[0])
-                     dataJson=JSON.parse(dataResult)
-                     document.getElementById('nombreEditar').value=dataJson[0]["nombre"];
- 
-                     $('#updateModal').modal('show');
-                     
-                 },
-                 error: function(e){
-                     console.log(e)
-                 }
-             });
-         });
+
+
+         @if(Session('idRole') != 5)
+            var data = null  
+            $('#table_id tbody').on('click', 'tr', function () {
+                data = datatable.row(this).data();
+                datatable.row(this).index
+                //console.log(data["id"])
+    
+                $.ajax({
+                    url: "{{route('getEditarDataTipoEjercicios')}}",
+                    type: "POST",
+                    cache: false,
+                    data:{
+                        _token:'{{ csrf_token() }}',
+                        id: data["id"]
+                    },
+                    success: function(dataResult){
+                        console.log(dataResult)
+                        //console.log(dataResult[0])
+                        dataJson=JSON.parse(dataResult)
+                        document.getElementById('nombreEditar').value=dataJson[0]["nombre"];
+    
+                        $('#updateModal').modal('show');
+                        
+                    },
+                    error: function(e){
+                        console.log(e)
+                    }
+                });
+            });
+
+            //updatedata
+            $("#updateDataButton").click(function(){
+                $.ajax({
+                    url: "{{route('updatedataTipoEjercicios')}}",
+                    type: "POST",
+                    cache: false,
+                    data:{
+                        _token:'{{ csrf_token() }}',
+                        nombre: $('#nombreEditar').val(),
+                        id: data["id"]
+    
+                    },
+    
+                    success: function(dataResult){
+                        //console.log(dataResult)
+                        if(dataResult["code"]==200){
+                            msgSuccess(dataResult["msg"])
+                            $('#UpdateDataButtonClose').click();
+                            datatable.ajax.reload();
+                        }else{
+                            msgError(dataResult["msg"])
+                        }         
+                    
+                    },
+                    error: function(e){
+                        console.log(e)
+                        msgError("Error genérico. Por favor, inténtelo más tarde.")
+                    }
+                });
+            }); 
+        @endif
  
  
          //deletedata
@@ -306,37 +355,7 @@ $(document).ready( function () {
              
          }); 
  
-         //updatedata
-         $("#updateDataButton").click(function(){
-             $.ajax({
-                 url: "{{route('updatedataTipoEjercicios')}}",
-                 type: "POST",
-                 cache: false,
-                 data:{
-                     _token:'{{ csrf_token() }}',
-                     nombre: $('#nombreEditar').val(),
-                     id: data["id"]
- 
-                 },
- 
-                 success: function(dataResult){
-                     //console.log(dataResult)
-                     if(dataResult["code"]==200){
-                         msgSuccess(dataResult["msg"])
-                         $('#UpdateDataButtonClose').click();
-                         datatable.ajax.reload();
-                     }else{
-                         msgError(dataResult["msg"])
-                     }         
-                 
-                 },
-                 error: function(e){
-                     console.log(e)
-                     msgError("Error genérico. Por favor, inténtelo más tarde.")
-                 }
-             });
-         }); 
- 
+         
  
  
          /*para el caso en el que no insertemos ni nada por ajax, por ejemplo un post de un formulario que devuelve el action*/
