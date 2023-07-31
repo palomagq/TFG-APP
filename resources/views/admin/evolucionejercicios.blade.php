@@ -23,10 +23,10 @@
                             </div>
                         </div>
                         <div class="form-group col-md-4">
-                            <div class="row">
+                            <div class="row" style="margin-right: 3em;">
                                 <label style="font-size:13px; align-self: center;
                                 text-align: center;
-                                margin-bottom: unset;" for="fecha_fin" class="col-md-6"><b>Fecha Fin</b></label>
+                                margin-bottom: unset; " for="fecha_fin" class="col-md-6"><b>Fecha Fin</b></label>
                                 <input class="form-control form-control-border border-width-2 col-md-6"  type="date" placeholder="Fecha nacimiento" name="fecha_fin" id="fecha_fin" >
                             </div>
                         </div>
@@ -39,7 +39,7 @@
                                 <select class="js-example-responsive js-example-placeholder-single js-states form-control col-md-6" id="id_label_socio">
                                         <option value=""></option>
                                         @foreach($socios as $s)
-                                            <option value="{{$s->id}}">{{$s->nombre}}</option>
+                                            <option value="{{$s->id}}">{{$s->nombre}}  {{$s->apellidos}}</option>
                                         @endforeach                                        
                                 </select>
                             </div>
@@ -118,6 +118,10 @@ $(document).ready( function () {
                  type: 'post',
                  data: {
                      "_token": $("meta[name='csrf-token']").attr("content"),
+                     "id_gimnasio": function() { 
+                        console.log($('#id_gimnasio_selected_calendario').val());
+                        return $('#id_gimnasio_selected_calendario').val() 
+                    },
                  },
                  //dataSrc:""                          
              },
@@ -127,28 +131,8 @@ $(document).ready( function () {
          });
 
          
-      //selectdata tabla_2
-      var datatable2 = $('#table_id_2').DataTable({
-             language: {
-                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-                 },
-
-             ajax: {
-                 url: "{{route('selectdataEntrenamientoDiario_tabla2')}}",
-                 type: 'post',
-                 data: {
-                     "_token": $("meta[name='csrf-token']").attr("content")
-                 },
-                 //dataSrc:""                          
-             },
-             responsive: true,
- 
-             columns: [ {data:"nombre"},{data:"serie_real"},{data:"repeticion_real"},{data:"distancia_real"},{data:"peso_real"}]
-         });
-
- 
          //hacemos el trigger de un onclick, concretamente de un click en una etiqueta td con una clase (class) dtr-control
-         $('#table_id_1 tbody').on('click', 'td.dtr-control', function (e) {
+         $('#table_id tbody').on('click', 'td.dtr-control', function (e) {
  
              //me cojo la row del td al que he dado click
              var tr = $(this).closest('tr');
@@ -164,57 +148,35 @@ $(document).ready( function () {
          } );
 
 
-         //hacemos el trigger de un onclick, concretamente de un click en una etiqueta td con una clase (class) dtr-control
-         $('#table_id_2 tbody').on('click', 'td.dtr-control', function (e) {
-            
-            //me cojo la row del td al que he dado click
-            var tr = $(this).closest('tr');
-            //cojo la row del datatable para ver si se ha mostrado
-            var row = datatable2.row(tr);
 
-            if (//tr.hasClass('dt-hasChild') || !row.child.isShown()
-                //datatable te da una funcion que te dice si el responsive esta activado o no
-                datatable2.responsive.hasHidden() ) {
-                //no muestres el modal
-                e.stopPropagation();
-            } 
-            } 
-            );
+        //hace el rellamado y filtro del gimnasio para el admin->listener
+        $('#id_gimnasio_selected_calendario').on('change', function() {
+            console.log("reload")
+            //datatable.ajax.reload();
 
-        
-
-        //modal al hacer click en el ejercicio de la tabla 1
-        var data = null  
-        $('#table_id_1 tbody').on('click', 'tr', function () {
-            data = datatable.row(this).data();
-            datatable.row(this).index
-            document.getElementById('ejercicioNombre').value=data["nombre"];
-
-            $('#createModal').modal('show');
-        });
-
-        //insertdata -> hace un insert internamente en el controller
-        $("#createDataButton").click(function(){
             $.ajax({
-                url: "{{route('insertdataEntrenamientoDiario')}}",
+                url: "{{route('selectSocioGimnasio')}}",
                 type: "POST",
                 cache: false,
                 data:{
                     _token:'{{ csrf_token() }}',
-                    nombre: $("#ejercicioNombre").val(),
-                    serie_real: $("#series").val(),
-                    repeticion_real: $("#repeticiones").val(),
-                    distancia_real: $("#distancia").val(),
-                    peso_real: $("#peso").val(),
-                    ejercicio_id:data["ejercicio_id"],
-                    evolucion_ejercicios_id: data["evolucion_ejercicios_id"]
+                    id_gimnasio: $("#id_gimnasio_selected_calendario").val(),
                 },
                 success: function(dataResult){
                     console.log(dataResult)
                     if(dataResult["code"]==200){
-                    msgSuccess(dataResult["msg"])                       
-                        $('#UpdateDataButtonClose').click();                       
-                        datatable2.ajax.reload();
+                    
+                        //console.log( dataResult["data"])
+
+                        $("#id_label_socio").empty();
+
+                        $('#id_label_socio').append('<option value=""> </option>');
+
+                        for (var index = 0; index <= dataResult["data"].length; index++) {
+                            $('#id_label_socio').append('<option value="' +  dataResult["data"][index].id + '">' +  dataResult["data"][index].nombre + ' ' +  dataResult["data"][index].apellidos + '</option>');
+                        }
+
+
                     }else{
                         msgError(dataResult["msg"])
                     }
@@ -224,87 +186,8 @@ $(document).ready( function () {
                     msgError("Error genérico. Por favor, inténtelo más tarde.")
                 }
             });
-            
-        }); 
-
-        //obtener datos de la tabla2
-        var data2 = null  
-        $('#table_id_2 tbody').on('click', 'tr', function () {
-            data2 = datatable2.row(this).data();
-            datatable2.row(this).index
-            console.log(data2)
-            $.ajax({
-                url: "{{route('getEditarDataEntrenamientoDiario')}}",
-                type: "POST",
-                cache: false,
-                data:{
-                    _token:'{{ csrf_token() }}',
-                    evolucion_ejercicios_datos_id: data2["evolucion_ejercicios_datos_id"]
-                },
-                success: function(dataResult){
-                    console.log(dataResult)
-                    dataJson=JSON.parse(dataResult)
-
-                        document.getElementById('ejercicioNombreEditar').value=dataJson[0]["nombre"];
-                        document.getElementById('seriesEditar').value=dataJson[0]["serie_real"];
-                        document.getElementById('repeticionesEditar').value=dataJson[0]["repeticion_real"];
-                        document.getElementById('distanciaEditar').value=dataJson[0]["distancia_real"];
-                        document.getElementById('pesoEditar').value=dataJson[0]["peso_real"];
-
-                        $('#updateModal').modal('show');
-
-                },
-                error: function(e){
-                    console.log(e)
-                    msgError("Error genérico. Por favor, inténtelo más tarde.")
-                }
-            });
         });
-
-
-
-
-        //updatedata de la tabla 2
-        $("#updateDataButton2").click(function(){
-
-            $.ajax({
-                url: "{{route('updatedataEntrenamientoDiario')}}",
-                type: "POST",
-                cache: false,
-                data:{
-                    _token:'{{ csrf_token() }}',
-
-                    nombre: $("#ejercicioNombre").val(),
-                    serie_real: $("#seriesEditar").val(),
-                    repeticion_real:  $('#repeticionesEditar').val(),
-                    distancia_real:  $('#distanciaEditar').val(),
-                    peso_real:  $('#pesoEditar').val(),
-
-                    //ejercicio_id:data["ejercicio_id"],
-                    //evolucion_ejercicios_id: data["evolucion_ejercicios_id"],
-
-                    evolucion_ejercicios_datos_id: data2["evolucion_ejercicios_datos_id"],
-
-
-                },
-
-                success: function(dataResult){
-                    //console.log(dataResult)
-                    if(dataResult["code"]==200){
-                        msgSuccess(dataResult["msg"])
-                        $('#UpdateDataButtonClose2').click();
-                        datatable2.ajax.reload();
-                    }else{
-                        msgError(dataResult["msg"])
-                    }         
-                
-                },
-                error: function(e){
-                    console.log(e)
-                    msgError("Error genérico. Por favor, inténtelo más tarde.")
-                }
-            });
-        }); 
+      
 
 });
 

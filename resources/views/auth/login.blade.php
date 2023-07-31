@@ -52,9 +52,9 @@
 						<span class="focus-input100" data-symbol="&#xf190;"></span>
 					</div>
 					
-					<div hidden class="text-right p-t-8 p-b-31">
-						<a href="#">
-							Forgot password?
+					<div  class="text-right p-t-8 p-b-31">
+						<a href="{{ route('resetpassword') }}">
+							¿Olvidaste tu contraseña?
 						</a>
 					</div>
 					

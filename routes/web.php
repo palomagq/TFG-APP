@@ -184,5 +184,11 @@ Auth::routes();
     //Evolución Ejercicios
     Route::get('/EvolucionEjercicios', 'EvolucionEjercicioController@admin')->name('EvolucionEjercicios');
     Route::post('/selectdataEvolucionEjercicios', 'EvolucionEjercicioController@selectdataEvolucionEjercicios')->name('selectdataEvolucionEjercicios');
-    
+    Route::post('/selectSocioGimnasio', 'EvolucionEjercicioController@selectSocioGimnasio')->name('selectSocioGimnasio');
+
+
     Route::get('/send-mail', 'MailSender@sendEmailTest')->name('send-mail');
+
+    Route::get('/resetpassword', 'Auth\ResetPasswordController@admin')->name('resetpassword');;
+    Route::post('/reset_password', 'Auth\ResetPasswordController@resetPassword')->name('reset_password');;
+    Route::post('/update_password', 'Auth\ResetPasswordController@updatePassword')->name('update_password');;

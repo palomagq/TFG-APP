@@ -20,10 +20,10 @@ class GimnasioController extends Controller
  
      public function selectdatagimnasio(Request $request){
  
-         $users = DB::select('select * from gimnasio');
+         $gimnasios = DB::select('select * from gimnasio');
  
          $data = array(
-             'data' => $users
+             'data' => $gimnasios
              
          );
  

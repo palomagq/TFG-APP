@@ -28,9 +28,11 @@ class MyTestMail extends Mailable
      *
      * @return $this
      */
+
+     //se  crean los tipos de email
     public function build()
     {
-        return $this->subject('Mail from FITENERGYM.es')
+        return $this->subject('FitEnerGym - Recuperación de Contraseña')
                     ->view('emails.myTestMail');    
     }
 }

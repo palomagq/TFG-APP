@@ -109,6 +109,7 @@ class LoginController extends Controller
             Session::put('nombre',$user->nombre);
             Session::put('email',$user->email);
             Session::put('idRole',$user->role_id);
+            Session::put('cambiarPass',$user->cambiarPassword);
 
         }
         else{
@@ -155,7 +156,7 @@ class LoginController extends Controller
             //user
             return redirect('listarUsuarios');
         }else if($user->role_id==2){
-            return redirect('listarJefes');
+            return redirect('listarJefes'); //creo q deberia ir al listado de personal o de recepcionista
         }else if($user->role_id==3){
             return redirect('listarPersonal');    
         }else if($user->role_id==4){

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 class MailSender extends Controller
 {
     //
@@ -19,7 +18,7 @@ class MailSender extends Controller
         ];
     
        
-    
+
         \Mail::to('huelvana1994@gmail.com')->send(new \App\Mail\MyTestMail($details));
     
     

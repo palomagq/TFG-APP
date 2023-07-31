@@ -108,7 +108,8 @@
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="">
                         @csrf
                     </form>
-                    @if(Session('idRole') == 1 && isset($gimnasios))
+                    <!--isset -> para saber si existe o no-->
+                    @if(Session('idRole') == 1 && isset($gimnasios)) 
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col">
@@ -145,6 +146,45 @@
 
                     @yield('content')
                     @yield('modal')
+
+                    <div class="modal fade" id="cambiarPassModal" tabindex="-1" role="dialog" aria-labelledby="createTitle" aria-hidden="true" style="padding-right:0px" data-backdrop="static" data-keyboard="false">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content" style="min-width: 650px">
+                                <div class="modal-header">
+                                <h1>Cambiar Contraseña</h1>
+                                <!--button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>-->
+                                 </div>
+                                 
+                                <div class="modal-body" style=" margin-top: -2em;">
+                                    
+                                    <form action="{{route('update_password')}}" method="POST" name="cambiarPassModal"> 
+                                        @csrf
+                                        <hr>
+                                        <div class="card-body" style="padding: 0;">
+                                            <div class="form-group">
+                                                <label style="font-size:13px" for="new_pass"><b>Nueva Contraseña</b></label>
+                                                <input class="form-control form-control-border border-width-2" type="password" placeholder="Nueva Contraseña" name="new_pass" id="new_pass" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label style="font-size:13px" for="confirm_pass"><b>Repetir Contraseña</b></label>
+                                                <input class="form-control form-control-border border-width-2"  type="password" placeholder="Repetir Contraseña" name="confirm_pass" id="confirm_pass" required>
+                                            </div>
+                                            
+                                       <hr>
+                                        <div class="card-footer" style="background-color: white; padding: 0;">
+                                            <!--<button type="button" class="btn btn-secondary float-left" id="insertDataButtonClose" data-dismiss="modal">Cancelar</button>-->
+                                            <button type="submit" class="btn btn-primary float-right" id="insertDataButton">Aceptar</button>
+                                        </div>
+                                        <p id="result"></p>
+                                    </form>
+                                              
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
                     @yield('scripts')
                 </section>
             </div>
@@ -163,6 +203,32 @@
                     $('.sidebar-mini').addClass('sidebar-closed sidebar-collapse');
                 });
             });*/
+            //console.log({{Session('cambiarPass')}})
+            
+
+            
+
+            // Obtener los elementos de entrada y el párrafo donde mostraremos el resultado
+            const new_passInput = document.getElementById('new_pass');
+            const confirm_passInput = document.getElementById('confirm_pass');
+            const resultParagraph = document.getElementById('result');
+
+            // Agregar el escuchador de eventos 'input' a ambos campos de contraseña
+            new_passInput.addEventListener('input', compararPassword);
+            confirm_passInput.addEventListener('input', compararPassword);
+
+            function compararPassword(){
+                // Obtener los valores de las contraseñas
+                    const new_pass = new_passInput.value;
+                    const confirm_pass = confirm_passInput.value;
+
+                    // Realizar la comparación de las contraseñas y actualizar el párrafo con el resultado
+                    if (new_pass === confirm_pass && new_pass != null && confirm_pass != null) {
+                        resultParagraph.textContent = 'Las contraseñas coinciden.';
+                    } else {
+                        resultParagraph.textContent = 'Las contraseñas no coinciden.';
+                    }
+            }
 
             @if(Session::has('successPayment'))
                 Swal.fire({
@@ -173,6 +239,7 @@
                     timer: 0
                 });
             @endif
+
         </script>
 
        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -198,5 +265,13 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js" integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!--<script src="js/form-validation.js"></script>-->
         
+
+        <script>
+            @if(Session('cambiarPass') == 1)
+                //console.log('Hola')
+                $('#cambiarPassModal').modal('show');
+            @endif
+        </script>
+
     </body>
 </html>
