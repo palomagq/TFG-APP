@@ -16,34 +16,55 @@
 
                     <div class="form-row row">
                         <div class="form-group col-md-4">
-                            <div class="row">
+                            <div class="row" style="margin-right: 1.2em;">
                                 <label style="font-size:13px; align-self: center;text-align: center; margin-bottom: unset;" 
                                 for="fecha_inicio" class="col-md-6"><b>Fecha Inicio</b></label>
                                 <input class="form-control form-control-border border-width-2 col-md-6" type="date" placeholder="Fecha Inicio" name="fecha_inicio" id="fecha_inicio"  >
                             </div>
                         </div>
                         <div class="form-group col-md-4">
-                            <div class="row" style="margin-right: 3em;">
+                            <div class="row" style="margin-right: 1.2em;">
                                 <label style="font-size:13px; align-self: center;
                                 text-align: center;
                                 margin-bottom: unset; " for="fecha_fin" class="col-md-6"><b>Fecha Fin</b></label>
-                                <input class="form-control form-control-border border-width-2 col-md-6"  type="date" placeholder="Fecha nacimiento" name="fecha_fin" id="fecha_fin" >
+                                <input class="form-control form-control-border border-width-2 col-md-6"  type="date" placeholder="Fecha Fin" name="fecha_fin" id="fecha_fin" >
                             </div>
                         </div>
-                        <div class="form-group col-md-4">
-                            <div class="row">
-                                <label style="font-size:13px; align-self: center;
-                                text-align: ceenter;
-                                margin-bottom: unset;" class="col-md-6" for="listado_socios"><b>Listado Socios</b></label>
-    
-                                <select class="js-example-responsive js-example-placeholder-single js-states form-control col-md-6" id="id_label_socio">
-                                        <option value=""></option>
-                                        @foreach($socios as $s)
-                                            <option value="{{$s->id}}">{{$s->nombre}}  {{$s->apellidos}}</option>
-                                        @endforeach                                        
-                                </select>
+
+                        @if(Session('idRole') == 5 )
+                            <div style="display: none">
+                                <div class="form-group col-md-4">
+                                    <div class="row">
+                                        <label style="font-size:13px; align-self: center;
+                                        text-align: ceenter;
+                                        margin-bottom: unset;" class="col-md-6" for="listado_socios"><b>Listado Socios</b></label>
+            
+                                        <select class="js-example-responsive js-example-placeholder-single js-states form-control col-md-6" id="id_label_socio">
+                                                <option value=""></option>
+                                                @foreach($socios as $s)
+                                                    <option value="{{$s->id}}">{{$s->nombre}}  {{$s->apellidos}}</option>
+                                                @endforeach                                        
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        @else
+
+                            <div class="form-group col-md-4">
+                                <div class="row">
+                                    <label style="font-size:13px; align-self: center;
+                                    text-align: ceenter;
+                                    margin-bottom: unset;" class="col-md-6" for="listado_socios"><b>Listado Socios</b></label>
+        
+                                    <select class="js-example-responsive js-example-placeholder-single js-states form-control col-md-6" id="id_label_socio">
+                                            <option value=""></option>
+                                            @foreach($socios as $s)
+                                                <option value="{{$s->id}}">{{$s->nombre}}  {{$s->apellidos}}</option>
+                                            @endforeach                                        
+                                    </select>
+                                </div>
+                            </div>
+                        @endif 
                     </div>
                 </form>
             </div>
@@ -75,6 +96,10 @@
             </div>
         </div>
     </div>
+
+    <div id="chart-container" style="display: none;">
+        <canvas id="myChart"></canvas>
+    </div>
 </div>
 
 
@@ -93,7 +118,27 @@
 
 @section('modal')
 
- 
+
+
+
+ <!-- Modal  Grafica-->
+
+<div class="modal fade" id="chartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Gráfica</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" width="400" height="400">
+                <canvas id="chartCanvas" ></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @endsection
 
@@ -118,22 +163,31 @@ $(document).ready( function () {
                  type: 'post',
                  data: {
                      "_token": $("meta[name='csrf-token']").attr("content"),
-                     "id_gimnasio": function() { 
-                        console.log($('#id_gimnasio_selected_calendario').val());
-                        return $('#id_gimnasio_selected_calendario').val() 
+                     "id_usuario": function() { 
+                        console.log($('#id_label_socio').val());
+                        return $('#id_label_socio').val() 
+                    },
+                    "fecha_inicio": function() { 
+                        console.log($('#fecha_inicio').val());
+                        return $('#fecha_inicio').val() 
+                    },
+                    "fecha_fin": function() { 
+                        console.log($('#fecha_fin').val());
+                        return $('#fecha_fin').val() 
                     },
                  },
                  //dataSrc:""                          
              },
              responsive: true,
  
-             columns: [ {data:"fecha"},{data:"nombre"},{data:"serie"},{data:"repeticion"},{data:"distancia"},{data:'peso'}]
+             columns: [ {data:"fecha", render: DataTable.render.datetime( 'D/M/YYYY' )},{data:"nombre"},{data:"serie"},{data:"repeticion"},{data:"distancia"},{data:'peso'}]
          });
 
          
          //hacemos el trigger de un onclick, concretamente de un click en una etiqueta td con una clase (class) dtr-control
          $('#table_id tbody').on('click', 'td.dtr-control', function (e) {
- 
+        
+
              //me cojo la row del td al que he dado click
              var tr = $(this).closest('tr');
              //cojo la row del datatable para ver si se ha mostrado
@@ -145,9 +199,164 @@ $(document).ready( function () {
                  //no muestres el modal
                  e.stopPropagation();
              } 
+
+
+            //1-llamar a un ajax para que me devuelva los atos para la grafica
+            data = datatable.row(this).data();
+            //console.log(data['nombre'])
+
+            $.ajax({
+                url: "{{route('grafica')}}", //return ['code'=>200,'data'=>array de datos para mostrar en la grafica]
+                type: "POST",
+                cache: false,
+                data:{
+                    _token:'{{ csrf_token() }}',
+                    fecha_inicio: $("#fecha_inicio").val(),
+                    fecha_fin:$("#fecha_fin").val(),
+                    id_socio:$("#id_label_socio").val(),
+                    id_ejercicio: data['nombre']
+                },
+                success: function(dataResult){
+                    console.log(dataResult)
+                    if(dataResult["code"]==200){
+
+                        //dataResult["data"]['x'] -> fechas
+                        //dataResult["data"]['y'] -> peso
+                        //dataResult["data"]['dataset'] -> serie
+                    
+                        //2-le damos los datos a la grafica y la creamos
+                            var ctx = document.getElementById('chartCanvas').getContext('2d');
+                            if (myChart) {
+                                myChart.destroy();
+                            }
+                        // Usa los datos de la fila para generar los datos para la gráfica
+                        //cambiar labels,label y data
+                        console.log( dataResult['data'].replace(/\\n/g," ").replaceAll("\"",""))
+                            var chartData = {
+                                //labels: ['14/08/2023', '15/08/2023','16/08/2023'], // Etiquetas del eje X
+                               labels: dataResult['labels'],
+                                /*datasets: [{
+                                    label: ['1', '2','3','4','5'],
+                                    data:[[10, 20, 15, 30, 25] , [20, 30, 35, 20, null]], // Valores de los datos
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1
+                                }]*/
+                                datasets: ""+dataResult['data'].replace(/\\n/g," ").replaceAll("\"",""),
+                                
+                                
+                                /* [
+                                   
+                                /*{
+                                    label: '1',
+                                    data: [10,15,20],
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderWidth: 1
+                                },
+                                {
+                                label: '2',
+                                data: [35,40,60],
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderWidth: 1
+                                }
+                                ,
+                                {
+                                label: '3',
+                                data: [null,null,80],
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderWidth: 1
+                                }
+                            ]*/
+                            };
+
+                            var myChart = new Chart(ctx, {
+                                type: 'bar',
+                                data: chartData,
+                                options: {
+                                    responsive: true,
+                                    plugins: {
+                                        legend: {
+                                            position: 'top',
+                                        },
+                                        title: {
+                                            display: true,
+                                            text: 'Evolución del Ejercicio ' +data['nombre']+ ' de (nombre y apellidos del socio)'
+                                        }
+                                    }
+                                }
+                            });
+
+                            //3-mostramos el modal
+                            $('#chartModal').modal('show');
+
+
+
+                    }else{
+                        msgError(dataResult["msg"])
+                    }
+                },
+                error: function(e){
+                    console.log(e)
+                    msgError("Error genérico. Por favor, inténtelo más tarde.")
+                }
+            });
+            
+            
+
+
+                // Obtén los datos de la fila seleccionada (usando DataTables API)
+                //var rowData = dataTable.row(this).data();
+
+                // Mostrar el contenedor del gráfico y ocultar la tabla
+               /* $('#chart-container').show();
+                $('#table_id').hide();
+
+                // Crear el gráfico usando Chart.js
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar', // Cambia el tipo de gráfico según tus necesidades
+                    data: {
+                        labels: ['Ejemplo 1', 'Ejemplo 2'], // Etiquetas del eje X
+                        datasets: [{
+                            label: 'Ejemplo',
+                            data: [10, 20, 15, 30, 25], // Valores de los datos
+                            backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'], // Colores de fondo
+                            borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'], // Colores de borde
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        // Configuración adicional del gráfico
+                    }
+                });*/
+
+
+                /*var ctx = document.getElementById('chartCanvas').getContext('2d');
+    
+                // Usa los datos de la fila para generar los datos para la gráfica
+                var chartData = {
+                    labels: ['Ejemplo 1', 'Ejemplo 2'], // Etiquetas del eje X
+                    datasets: [{
+                        label: 'Ejemplo',
+                        data: [10, 20, 15, 30, 25], // Valores de los datos
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                };
+
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        // Configura opciones adicionales según tus necesidades
+                    }
+                });*/
+
          } );
-
-
 
         //hace el rellamado y filtro del gimnasio para el admin->listener
         $('#id_gimnasio_selected_calendario').on('change', function() {
@@ -167,14 +376,16 @@ $(document).ready( function () {
                     if(dataResult["code"]==200){
                     
                         //console.log( dataResult["data"])
-
+                        //se borra las opciones de los socios al seleccionar un nuevo gimnasio en el select
                         $("#id_label_socio").empty();
 
                         $('#id_label_socio').append('<option value=""> </option>');
 
-                        for (var index = 0; index <= dataResult["data"].length; index++) {
+                        for (var index = 0; index < dataResult["data"].length; index++) {
                             $('#id_label_socio').append('<option value="' +  dataResult["data"][index].id + '">' +  dataResult["data"][index].nombre + ' ' +  dataResult["data"][index].apellidos + '</option>');
                         }
+
+
 
 
                     }else{
@@ -186,6 +397,23 @@ $(document).ready( function () {
                     msgError("Error genérico. Por favor, inténtelo más tarde.")
                 }
             });
+        });
+
+
+        //reload del datatable de los select fecha_inicio,fecha_fin,lista_socios
+        $('#id_label_socio').on('change', function() {
+            console.log("reload")
+            datatable.ajax.reload();
+        });
+
+        $('#fecha_inicio').on('change', function() {
+            console.log("reload")
+            datatable.ajax.reload();
+        });
+
+        $('#fecha_fin').on('change', function() {
+            console.log("reload")
+            datatable.ajax.reload();
         });
       
 

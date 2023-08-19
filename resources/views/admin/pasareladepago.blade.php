@@ -11,7 +11,7 @@ $stripe_key = 'pk_test_51MtFDXHX7PLXGa17B3zJkbU1CSfjbRSx52wgvWLJIcTTGttbHnp1W0HG
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="">
-                <p>You will be charged rs {{$amount_tmp}}</p>
+                <p>Se le cobrará la cantidad de {{$amount_tmp}}</p>
             </div>
             <div class="card">
                 <form action="{{route('checkout.credit-card')}}"  method="post" id="payment-form">
@@ -20,7 +20,7 @@ $stripe_key = 'pk_test_51MtFDXHX7PLXGa17B3zJkbU1CSfjbRSx52wgvWLJIcTTGttbHnp1W0HG
                     <div class="form-group">
                         <div class="card-header">
                             <label for="card-element">
-                                Enter your credit card information
+                                Ingrese la información de su tarjeta de crédito                            
                             </label>
                         </div>
                         <div class="card-body">
@@ -38,7 +38,7 @@ $stripe_key = 'pk_test_51MtFDXHX7PLXGa17B3zJkbU1CSfjbRSx52wgvWLJIcTTGttbHnp1W0HG
                             class="btn btn-dark"
                             type="submit"
                             data-secret="{{ $intent }}"
-                            > Pay 
+                            > Pagar 
                         </button>
                     </div>
                 </form>
