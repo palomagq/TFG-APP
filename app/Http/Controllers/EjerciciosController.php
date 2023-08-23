@@ -16,9 +16,9 @@ class EjerciciosController extends Controller
 
         $request->user()->authorizeRoles(['admin','personal','socio']);
         $categorias = DB::select('select * from categoria_ejercicio');
-        $tipos = DB::select('select * from tipo_ejercicio');
+       // $tipos = DB::select('select * from tipo_ejercicio');
         $ejercicios = DB::select('select * from ejercicio');
-        return view('admin.listarejercicios',compact('categorias','tipos','ejercicios'));
+        return view('admin.listarejercicios',compact('categorias','ejercicios'));
      }
 
 
@@ -62,8 +62,8 @@ class EjerciciosController extends Controller
                /* if ($request->ejercicioPorDefecto == null){
                         $request->ejercicioPorDefecto.value(0);
                     }*/
-                    DB::insert('insert into ejercicio (nombre,ejercicioPorDefecto,categoria_id,tipo_id) 
-                    values (?,?,?,?) ' ,[$request->nombre,0,$request->categoria_id,$request->tipo_id]);
+                    DB::insert('insert into ejercicio (nombre,ejercicioPorDefecto,categoria_id) 
+                    values (?,?,?) ' ,[$request->nombre,0,$request->categoria_id]);
 
             } catch(\Illuminate\Database\QueryException $ex){ 
                     return ["code"=>500, "msg"=>"Se ha producido un error al crear el ejercicio".$ex->getMessage()];//500;
@@ -74,8 +74,8 @@ class EjerciciosController extends Controller
                /* if ($request->ejercicioPorDefecto == null){
                         $request->ejercicioPorDefecto.value(0);
                     }*/
-                    DB::insert('insert into ejercicio (nombre,ejercicioPorDefecto,categoria_id,tipo_id) 
-                    values (?,?,?,?) ' ,[$request->nombre,$request->ejercicioPorDefecto,$request->categoria_id,$request->tipo_id]);
+                    DB::insert('insert into ejercicio (nombre,ejercicioPorDefecto,categoria_id) 
+                    values (?,?,?) ' ,[$request->nombre,$request->ejercicioPorDefecto,$request->categoria_id]);
 
             } catch(\Illuminate\Database\QueryException $ex){ 
                     return ["code"=>500, "msg"=>"Se ha producido un error al crear el ejercicio".$ex->getMessage()];//500;
@@ -86,7 +86,7 @@ class EjerciciosController extends Controller
         try{
             $ejercicio = DB::select("select ejercicio_id from ejercicio where 
             nombre='".$request->nombre."' and ejercicioPorDefecto='".$request->ejercicioPorDefecto."'
-            and categoria_id='".$request->categoria_id."' and tipo_id='".$request->tipo_id."'");
+            and categoria_id='".$request->categoria_id."'");
             $user_id=session('idUsuario');
             $ejercicio_id=$ejercicio[0]->ejercicio_id;//["id"];
 
@@ -121,12 +121,12 @@ class EjerciciosController extends Controller
     }
 
     public function getEditarDataEjercicios(Request $request){
-        $categoriaData = DB::select("select e.ejercicio_id as id,e.nombre,e.ejercicioPorDefecto as ejercicioPorDefecto,ce.nombre as nombre_categoria,te.nombre as nombre_tipo,
-        ce.categoria_ejercicio_id as categoria_id,te.tipo_ejercicio_id as tipo_id
+        $categoriaData = DB::select("select e.ejercicio_id as id,e.nombre,e.ejercicioPorDefecto as ejercicioPorDefecto,ce.nombre as nombre_categoria,
+        ce.categoria_ejercicio_id as categoria_id
         from ejercicio as e inner join  categoria_ejercicio as ce on e.categoria_id=ce.categoria_ejercicio_id inner join 
         tipo_ejercicio as te on e.tipo_id=te.tipo_ejercicio_id
         where e.ejercicio_id=".$request->id. 
-        " group by e.ejercicio_id,e.nombre,e.ejercicioPorDefecto,ce.nombre,te.nombre,ce.categoria_ejercicio_id,te.tipo_ejercicio_id");
+        " group by e.ejercicio_id,e.nombre,e.ejercicioPorDefecto,ce.nombre,te.nombre,ce.categoria_ejercicio_id");
   
         return json_encode($categoriaData);
     }
@@ -136,7 +136,7 @@ class EjerciciosController extends Controller
        
         try {
             DB::update('update ejercicio set categoria_id = ? where ejercicio_id = ?', [$request->nombre_categoria,$request->id]);
-            DB::update('update ejercicio set tipo_id = ? where ejercicio_id = ?', [$request->nombre_tipo,$request->id]);
+            //DB::update('update ejercicio set tipo_id = ? where ejercicio_id = ?', [$request->nombre_tipo,$request->id]);
             DB::update('update ejercicio set nombre = ? where ejercicio_id = ?', [$request->nombre,$request->id]);
             if(Session('idRole') != 5){
                 DB::update('update ejercicio set ejercicioPorDefecto = ? where ejercicio_id = ?', [$request->ejercicioPorDefecto,$request->id]);

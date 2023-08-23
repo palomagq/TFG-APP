@@ -36,7 +36,7 @@
                                             <th>Nombre Ejercicio</th>
                                             <th>Serie (Objetivo)</th>
                                             <th>Repeticiones (Objetivo)</th>
-                                            <th>Distancia (Objetivo)</th>
+                                            <!--<th>Distancia (Objetivo)</th>-->
                                           </tr>
                                           
                                     </thead>
@@ -52,7 +52,7 @@
                                             <th>Nombre Ejercicio</th>
                                             <th>Serie (Real)</th>
                                             <th>Repeticiones (Real)</th>
-                                            <th>Distancia (Real)</th>
+                                            <!--<th>Distancia (Real)</th>-->
                                             <th>Peso (Real)</th>
                                           </tr>
                                           
@@ -166,12 +166,12 @@
                         </div>                           
                     </div>
                     <div class="form-row row">
-                        <div class="form-group col-md-6">
+                        <!--<div class="form-group col-md-6">
                             <div class="row">
                                 <label style="font-size:13px" for="distancia"><b>Distancia</b></label>
                                 <input class="form-control form-control-border border-width-2 col-md-8" type="number" placeholder="Distancia" name="distancia" id="distancia" min="0">                                   
                             </div>
-                        </div> 
+                        </div>--> 
                         <div class="form-group col-md-6">
                             <div class="row">
                                 <label style="font-size:13px" for="peso"><b>Peso</b></label>
@@ -237,12 +237,12 @@
                         </div>                           
                     </div>
                     <div class="form-row row">
-                        <div class="form-group col-md-6">
+                        <!--<div class="form-group col-md-6">
                             <div class="row">
                                 <label style="font-size:13px" for="distancia"><b>Distancia</b></label>
                                 <input class="form-control form-control-border border-width-2 col-md-8" type="number" placeholder="Distancia" name="distanciaEditar" id="distanciaEditar" min="0">                                   
                             </div>
-                        </div> 
+                        </div>--> 
                         <div class="form-group col-md-6">
                             <div class="row">
                                 <label style="font-size:13px" for="peso"><b>Peso</b></label>
@@ -300,7 +300,7 @@ $(document).ready( function () {
              },
              responsive: true,
  
-             columns: [ {data:"nombre"},{data:"serie_objetivo"},{data:"repeticion_objetivo"},{data:"distancia_objetivo"}]
+             columns: [ {data:"nombre"},{data:"serie_objetivo"},{data:"repeticion_objetivo"}]
          });
 
          
@@ -320,7 +320,7 @@ $(document).ready( function () {
              },
              responsive: true,
  
-             columns: [ {data:"nombre"},{data:"serie_real"},{data:"repeticion_real"},{data:"distancia_real"},{data:"peso_real"}]
+             columns: [ {data:"nombre"},{data:"serie_real"},{data:"repeticion_real"},{data:"peso_real"}]
          });
 
  
@@ -381,7 +381,7 @@ $(document).ready( function () {
                     nombre: $("#ejercicioNombre").val(),
                     serie_real: $("#series").val(),
                     repeticion_real: $("#repeticiones").val(),
-                    distancia_real: $("#distancia").val(),
+                    //distancia_real: $("#distancia").val(),
                     peso_real: $("#peso").val(),
                     ejercicio_id:data["ejercicio_id"],
                     evolucion_ejercicios_id: data["evolucion_ejercicios_id"]
@@ -425,7 +425,7 @@ $(document).ready( function () {
                         document.getElementById('ejercicioNombreEditar').value=dataJson[0]["nombre"];
                         document.getElementById('seriesEditar').value=dataJson[0]["serie_real"];
                         document.getElementById('repeticionesEditar').value=dataJson[0]["repeticion_real"];
-                        document.getElementById('distanciaEditar').value=dataJson[0]["distancia_real"];
+                        //document.getElementById('distanciaEditar').value=dataJson[0]["distancia_real"];
                         document.getElementById('pesoEditar').value=dataJson[0]["peso_real"];
 
                         $('#updateModal').modal('show');
@@ -454,7 +454,7 @@ $(document).ready( function () {
                     nombre: $("#ejercicioNombre").val(),
                     serie_real: $("#seriesEditar").val(),
                     repeticion_real:  $('#repeticionesEditar').val(),
-                    distancia_real:  $('#distanciaEditar').val(),
+                    //distancia_real:  $('#distanciaEditar').val(),
                     peso_real:  $('#pesoEditar').val(),
 
                     //ejercicio_id:data["ejercicio_id"],

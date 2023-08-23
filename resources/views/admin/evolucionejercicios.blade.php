@@ -83,7 +83,7 @@
                                             <th>Nombre Ejercicio</th>
                                             <th>Serie</th>
                                             <th>Repeticiones</th>
-                                            <th>Distancia</th>
+                                            <!--<th>Distancia</th>-->
                                             <th>Peso</th>
                                           </tr>
                                           
@@ -152,7 +152,7 @@ $(document).ready( function () {
 
     //datatable
 
-      //selectdata tabla_1
+      //selectdata 
       var datatable = $('#table_id').DataTable({
              language: {
                  "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
@@ -180,10 +180,11 @@ $(document).ready( function () {
              },
              responsive: true,
  
-             columns: [ {data:"fecha", render: DataTable.render.datetime( 'D/M/YYYY' )},{data:"nombre"},{data:"serie"},{data:"repeticion"},{data:"distancia"},{data:'peso'}]
+             columns: [ {data:"fecha", render: DataTable.render.datetime( 'D/M/YYYY' )},{data:"nombre"},{data:"serie"},{data:"repeticion"},{data:'peso'}]
          });
 
-         
+         let myChart;
+
          //hacemos el trigger de un onclick, concretamente de un click en una etiqueta td con una clase (class) dtr-control
          $('#table_id tbody').on('click', 'td.dtr-control', function (e) {
         
@@ -204,7 +205,6 @@ $(document).ready( function () {
             //1-llamar a un ajax para que me devuelva los atos para la grafica
             data = datatable.row(this).data();
             //console.log(data['nombre'])
-
             $.ajax({
                 url: "{{route('grafica')}}", //return ['code'=>200,'data'=>array de datos para mostrar en la grafica]
                 type: "POST",
@@ -225,26 +225,17 @@ $(document).ready( function () {
                         //dataResult["data"]['dataset'] -> serie
                     
                         //2-le damos los datos a la grafica y la creamos
-                            var ctx = document.getElementById('chartCanvas').getContext('2d');
-                            if (myChart) {
-                                myChart.destroy();
-                            }
+                        var ctx = document.getElementById('chartCanvas').getContext('2d');
+                            
                         // Usa los datos de la fila para generar los datos para la gráfica
-                        //cambiar labels,label y data
-                        console.log( dataResult['data'].replace(/\\n/g," ").replaceAll("\"",""))
+
+      
                             var chartData = {
-                                //labels: ['14/08/2023', '15/08/2023','16/08/2023'], // Etiquetas del eje X
-                               labels: dataResult['labels'],
-                                /*datasets: [{
-                                    label: ['1', '2','3','4','5'],
-                                    data:[[10, 20, 15, 30, 25] , [20, 30, 35, 20, null]], // Valores de los datos
-                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                    borderColor: 'rgba(75, 192, 192, 1)',
-                                    borderWidth: 1
-                                }]*/
-                                datasets: ""+dataResult['data'].replace(/\\n/g," ").replaceAll("\"",""),
-                                
-                                
+                                //labels: ['14/08/2023', '15/08/2023','16/08/2023'],
+                               labels: dataResult['labels'],  // Etiquetas del eje X
+
+                                datasets: dataResult['data'],
+                                    
                                 /* [
                                    
                                 /*{
@@ -272,7 +263,11 @@ $(document).ready( function () {
                             ]*/
                             };
 
-                            var myChart = new Chart(ctx, {
+                            if (myChart) {
+                                myChart.destroy();
+                            }
+
+                            myChart = new Chart(ctx, {
                                 type: 'bar',
                                 data: chartData,
                                 options: {
@@ -304,58 +299,6 @@ $(document).ready( function () {
                 }
             });
             
-            
-
-
-                // Obtén los datos de la fila seleccionada (usando DataTables API)
-                //var rowData = dataTable.row(this).data();
-
-                // Mostrar el contenedor del gráfico y ocultar la tabla
-               /* $('#chart-container').show();
-                $('#table_id').hide();
-
-                // Crear el gráfico usando Chart.js
-                var ctx = document.getElementById('myChart').getContext('2d');
-                var myChart = new Chart(ctx, {
-                    type: 'bar', // Cambia el tipo de gráfico según tus necesidades
-                    data: {
-                        labels: ['Ejemplo 1', 'Ejemplo 2'], // Etiquetas del eje X
-                        datasets: [{
-                            label: 'Ejemplo',
-                            data: [10, 20, 15, 30, 25], // Valores de los datos
-                            backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'], // Colores de fondo
-                            borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'], // Colores de borde
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        // Configuración adicional del gráfico
-                    }
-                });*/
-
-
-                /*var ctx = document.getElementById('chartCanvas').getContext('2d');
-    
-                // Usa los datos de la fila para generar los datos para la gráfica
-                var chartData = {
-                    labels: ['Ejemplo 1', 'Ejemplo 2'], // Etiquetas del eje X
-                    datasets: [{
-                        label: 'Ejemplo',
-                        data: [10, 20, 15, 30, 25], // Valores de los datos
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
-                };
-
-                var myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: chartData,
-                    options: {
-                        // Configura opciones adicionales según tus necesidades
-                    }
-                });*/
-
          } );
 
         //hace el rellamado y filtro del gimnasio para el admin->listener

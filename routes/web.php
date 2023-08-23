@@ -129,13 +129,13 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     //Tipo Ejercicios
-    Route::get('/TipoEjercicios', 'TiposEjerciciosController@admin')->name('TipoEjercicios');
+/*    Route::get('/TipoEjercicios', 'TiposEjerciciosController@admin')->name('TipoEjercicios');
     Route::post('/selectdataTipoEjercicios', 'TiposEjerciciosController@selectdataTipoEjercicios')->name('selectdataTipoEjercicios');
     Route::post('/insertdataTipoEjercicios', 'TiposEjerciciosController@insertdataTipoEjercicios')->name('insertdataTipoEjercicios');
     Route::post('/deletedataTipoEjercicios', 'TiposEjerciciosController@deletedataTipoEjercicios')->name('deletedataTipoEjercicios');
     Route::post('/updatedataTipoEjercicios', 'TiposEjerciciosController@updatedataTipoEjercicios')->name('updatedataTipoEjercicios');
     Route::post('/getEditarDataTipoEjercicios', 'TiposEjerciciosController@getEditarDataTipoEjercicios')->name('getEditarDataTipoEjercicios');
-
+*/
 
 
     //Ejercicios

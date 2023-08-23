@@ -42,13 +42,13 @@ class EvolucionEjercicioController extends Controller
         try { 
 
             if(Session('idRole')==5){
-                $evolucion_ejercicios = DB::select("select ee.fecha_registro as fecha,e.nombre,eed.serie,eed.repeticion,eed.distancia,eed.peso,u.nombre  as nombre_usuario,u.apellidos 
+                $evolucion_ejercicios = DB::select("select ee.fecha_registro as fecha,e.nombre,eed.serie,eed.repeticion,eed.peso,u.nombre  as nombre_usuario,u.apellidos 
                 from evolucion_ejercicios_datos as eed inner join evolucion_ejercicios ee on ee.evolucion_ejercicios_id=eed.evolucion_ejercicios_id
                 inner join ejercicio as e on e.ejercicio_id=eed.ejercicio_id
                 inner join usuarios as u on u.id=ee.usuario_id
                 where u.id='".Session('idUsuario')."'".$addConditions);
             }else{
-                $evolucion_ejercicios = DB::select("select ee.fecha_registro as fecha,e.nombre,eed.serie,eed.repeticion,eed.distancia,eed.peso,u.nombre as nombre_usuario,u.apellidos 
+                $evolucion_ejercicios = DB::select("select ee.fecha_registro as fecha,e.nombre,eed.serie,eed.repeticion,eed.peso,u.nombre as nombre_usuario,u.apellidos 
                 from evolucion_ejercicios_datos as eed inner join evolucion_ejercicios ee on ee.evolucion_ejercicios_id=eed.evolucion_ejercicios_id
                 inner join ejercicio as e on e.ejercicio_id=eed.ejercicio_id
                 inner join usuarios as u on u.id=ee.usuario_id
@@ -104,25 +104,25 @@ class EvolucionEjercicioController extends Controller
         try { 
 
             if((Session('idRole')== 1) || (Session('idRole')== 4)){
-                $evolucion_ejercicios_fechas = DB::select("select distinct DATE_FORMAT(ee.fecha_registro, '%d/%m/%Y')  as fecha,u.nombre as nombre_usuario,
-                u.apellidos,u.id,e.nombre 
+                $evolucion_ejercicios_fechas = DB::select("select distinct DATE_FORMAT(ee.fecha_registro, '%d/%m/%Y')  as fecha
                 from evolucion_ejercicios_datos as eed inner join evolucion_ejercicios ee
                 on ee.evolucion_ejercicios_id=eed.evolucion_ejercicios_id inner join ejercicio as e
                 on e.ejercicio_id=eed.ejercicio_id inner join usuarios as u on u.id=ee.usuario_id 
                 where u.id=".$id_socio. " and e.nombre='".$id_ejercicio."'".$addConditions);
             }else if(Session('idRole')== 5) {
-                $evolucion_ejercicios_fechas = DB::select("select distinct DATE_FORMAT(ee.fecha_registro, '%d/%m/%Y') as fecha,e.nombre,eed.serie,eed.repeticion,eed.distancia,eed.peso,u.nombre as nombre_usuario,u.apellidos 
-                from evolucion_ejercicios_datos as eed inner join evolucion_ejercicios ee on ee.evolucion_ejercicios_id=eed.evolucion_ejercicios_id
+                $evolucion_ejercicios_fechas = DB::select("select distinct DATE_FORMAT(ee.fecha_registro, '%d/%m/%Y') as fecha
+                from evolucion_ejercicios_datos as eed inner join evolucion_ejercicios ee 
+                on ee.evolucion_ejercicios_id=eed.evolucion_ejercicios_id
                 inner join ejercicio as e on e.ejercicio_id=eed.ejercicio_id
                 inner join usuarios as u on u.id=ee.usuario_id
-                where u.id='".Session('idUsuario')."'and e.nombre='".$id_ejercicio."'".$addConditions. "order by serie" );
+                where u.id='".Session('idUsuario')."'and e.nombre='".$id_ejercicio."'".$addConditions );
             }
 
 
 
             if((Session('idRole')== 1) || (Session('idRole')== 4)){
 
-                $evolucion_ejercicios_colores=DB::select("select eed.peso as peso, eed.serie as serie,COALESCE(SUM(eed.distancia),0) as suma_distancia,DATE_FORMAT(ee.fecha_registro, '%d/%m/%Y') as fecha_registro 
+                $evolucion_ejercicios_colores=DB::select("select eed.peso as peso, eed.serie as serie,DATE_FORMAT(ee.fecha_registro, '%d/%m/%Y') as fecha_registro 
                 from evolucion_ejercicios_datos as eed inner join evolucion_ejercicios ee on ee.evolucion_ejercicios_id=eed.evolucion_ejercicios_id
                 inner join ejercicio as e on e.ejercicio_id=eed.ejercicio_id
                 inner join usuarios as u on u.id=ee.usuario_id
@@ -131,7 +131,7 @@ class EvolucionEjercicioController extends Controller
                 order by eed.serie,ee.fecha_registro");
 
             }else if (Session('idRole')== 5) {
-                $evolucion_ejercicios_colores=DB::select("select eed.peso as peso, eed.serie as serie,COALESCE(SUM(eed.distancia),0) as suma_distancia,DATE_FORMAT(ee.fecha_registro, '%d/%m/%Y') as fecha_registro 
+                $evolucion_ejercicios_colores=DB::select("select eed.peso as peso, eed.serie as serie,DATE_FORMAT(ee.fecha_registro, '%d/%m/%Y') as fecha_registro 
                 from evolucion_ejercicios_datos as eed inner join evolucion_ejercicios ee on ee.evolucion_ejercicios_id=eed.evolucion_ejercicios_id
                 inner join ejercicio as e on e.ejercicio_id=eed.ejercicio_id
                 inner join usuarios as u on u.id=ee.usuario_id
@@ -143,79 +143,67 @@ class EvolucionEjercicioController extends Controller
             
             $fechas=[];
 
-            $series=[];
+            //$series=[];
             $pesos=[];
-            //$distancia=[];
 
             foreach($evolucion_ejercicios_fechas as $e){
                 array_push($fechas,$e->fecha);
+                //se inicializa los pesos a nulo ya que se añadirá posteriormente
                 array_push($pesos,null);
             }
-            
-            /*"{
-                label: '1',
-                data: [10,15,20],
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderWidth: 1
-            }"*/
 
             $serieAnt=1;
             $datasetFinal=[];
+            $backgroundColor = null;
+
             foreach($evolucion_ejercicios_colores as $e){
 
+                // cambio de color de barra en cada serie 
 
+                $backgroundColor = '#' . dechex(rand(0,10000000));
+
+                //en la serieAnt se ha pasado la serie en el foreach, y se va añadiendo todos los datos en un json menos el ultimo
                 if($serieAnt!=$e->serie){
-                    $serialized=json_encode($pesos);
-                    $json="{
-                        label: '".$serieAnt."',
-                        data: ".$serialized.",
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderWidth: 1
-                    }";
-                    array_push($datasetFinal,$json);
+
+                    $object = (object) ['label' => $serieAnt,
+                        'data'=>$pesos,
+                        'borderColor'=>'rgb(0, 0, 0)',
+                        'backgroundColor'=> $backgroundColor,
+                        'borderWidth'=>1
+                    ];
+                    array_push($datasetFinal,$object);
+
+                    //se reinicia los pesos en cada serie
                     $pesos=[];
 
                     foreach($evolucion_ejercicios_fechas as $e2){
                         array_push($pesos,null);
                     }
                 }
-                
-
+                //devuelve la posicion de la fecha
                 $pos=array_search($e->fecha_registro,$fechas);
+                //añade los pesos en cada fecha
                 $pesos[$pos]=$e->peso;
-                //$pesos = array_merge(array_slice($pesos, 0, $pos), array($e->peso), array_slice($pesos, $pos));
+                ////nos quedamos con la serieAnt
                 $serieAnt=$e->serie;
-                //array_push($series,$e->serie);
-                //$series = array('serie'=> $e->serie, 'peso'=> $e->peso, 'distancia'=> $e->distancia);
             }
-            $serialized=json_encode($pesos);
-            $json="{
-                label: '".$serieAnt."',
-                data: ".$serialized.",
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderWidth: 1
-            }";
-            array_push($datasetFinal,$json);
-            
-            /*foreach($evolucion_ejercicios_colores as $e){
-                array_push($pesos,$e->peso);
-                //$series = array('serie'=> $e->serie, 'peso'=> $e->peso, 'distancia'=> $e->distancia);
+            /*if(){
+                $var_mia='bordercolor('..')';
             }*/
-            
-           /* foreach($evolucion_ejercicios_colores as $e){
-                array_push($distancia,$e->distancia);
-                //$series = array('serie'=> $e->serie, 'peso'=> $e->peso, 'distancia'=> $e->distancia);
-            }*/
-           /* $data = array(
-                'data' => $evolucion_ejercicios
-                
-            );*/
 
-            //echo json_encode($data);
-            return ["code"=>200, "labels"=>$fechas,"data"=>json_encode($datasetFinal)];
+            // cambio de color de barra en cada serie 
+            $backgroundColor = '#' . dechex(rand(0,10000000));
+
+            //se añade el ultimo ya que en el foreach no lo hace
+            $object = (object) ['label' => $serieAnt,
+                'data'=>$pesos,
+                'borderColor'=>'rgb(0, 0, 0)',
+                'backgroundColor'=>'rgba(75, 192, 192, 0.2)',
+                'borderWidth'=>1
+            ];
+            array_push($datasetFinal,$object);
+            
+            return ["code"=>200, "labels"=>$fechas,"data"=>$datasetFinal];
 
         }catch(\Illuminate\Database\QueryException $ex){ 
 
@@ -223,4 +211,5 @@ class EvolucionEjercicioController extends Controller
             //return back();
         }
     }
+
 }

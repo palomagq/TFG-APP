@@ -457,43 +457,7 @@
                                         </li>
                                     @endif
 
-                                    @if((Session('idRole') == 1) || (Session('idRole') == 4) || (Session('idRole') == 5))
-
-                                        <li @if(session('active')=='TipoEjercicios' )
-                                                class="nav-item menu-is-opening menu-open"
-                                            @else
-                                                class="nav-item"
-                                            @endif>
-                                            <a href="#"
-                                             @if(session('active')=='TipoEjercicios')
-                                                class="nav-link active"
-                                            @else
-                                                class="nav-link"
-                                            @endif>
-                                            <i class="nav-icon fa-solid fa-list"></i>
-                                            <p>
-                                                    Tipos de Ejercicios
-                                                <i class="fas fa-angle-left right"></i>
-                                                <!-- <span class="badge badge-info right">6</span>-->
-                                                </p>
-                                            </a>
-                                            <ul class="nav nav-treeview">
-                                               
-                                                <li class="nav-item">
-                                                    <a href="{{route('TipoEjercicios')}}" 
-                                                    @if(session('active')=='TipoEjercicios')
-                                                        class="nav-link active"
-                                                    @else
-                                                        class="nav-link"
-                                                    @endif>
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>Listado de Tipos de Ejercicios</p>
-                                                    </a>
-                                                </li>    
-                                            </ul>
-                                        </li>
-                                    @endif
-
+                                  
 
                                     @if((Session('idRole') == 1) || (Session('idRole') == 4) || (Session('idRole') == 5))
 

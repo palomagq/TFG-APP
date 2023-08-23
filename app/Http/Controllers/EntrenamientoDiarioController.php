@@ -65,8 +65,8 @@ class EntrenamientoDiarioController extends Controller
         
         $ejercicios = DB::select('select e.ejercicio_id,e.nombre, are.serie as serie_objetivo,
         are.repeticion as repeticion_objetivo,
-        are.distancia as distancia_objetivo, eed.serie as serie_real,
-        eed.repeticion as repeticion_real,eed.distancia as distancia_real,eed.peso as peso_real
+        eed.serie as serie_real,
+        eed.repeticion as repeticion_real,eed.peso as peso_real
         FROM tabla_de_ejercicios as te inner join asignacion_rutina_ejercicios as are on 
         te.tabla_de_ejercicios_id=are.tabla_de_ejercicios_id inner JOIN ejercicio as e on 
         are.ejercicio_id=e.ejercicio_id inner join evolucion_ejercicios as ee on 
@@ -84,7 +84,7 @@ class EntrenamientoDiarioController extends Controller
      public function selectdataEntrenamientoDiario_tabla1(Request $request){
         try { 
             $entrenamiento_diario_tabla1 = DB::select('select distinct e.ejercicio_id,ee.tabla_de_ejercicios_id,e.nombre, are.serie as serie_objetivo,
-            are.repeticion as repeticion_objetivo,are.distancia as distancia_objetivo,ee.evolucion_ejercicios_id
+            are.repeticion as repeticion_objetivo,ee.evolucion_ejercicios_id
             FROM tabla_de_ejercicios as te inner join asignacion_rutina_ejercicios as are on 
             te.tabla_de_ejercicios_id=are.tabla_de_ejercicios_id inner JOIN ejercicio as e on 
             are.ejercicio_id=e.ejercicio_id inner join evolucion_ejercicios as ee on 
@@ -109,7 +109,7 @@ class EntrenamientoDiarioController extends Controller
     public function selectdataEntrenamientoDiario_tabla2(Request $request){
         try { 
             $entrenamiento_diario_tabla2 = DB::select('select distinct e.ejercicio_id,ee.tabla_de_ejercicios_id,e.nombre, eed.serie as serie_real,
-            eed.repeticion as repeticion_real,eed.distancia as distancia_real,eed.peso as peso_real,ee.tabla_de_ejercicios_id,eed.evolucion_ejercicios_datos_id
+            eed.repeticion as repeticion_real,eed.peso as peso_real,ee.tabla_de_ejercicios_id,eed.evolucion_ejercicios_datos_id
             FROM tabla_de_ejercicios as te inner join asignacion_rutina_ejercicios as are on 
             te.tabla_de_ejercicios_id=are.tabla_de_ejercicios_id inner JOIN ejercicio as e on 
             are.ejercicio_id=e.ejercicio_id inner join evolucion_ejercicios as ee on 
@@ -135,15 +135,15 @@ class EntrenamientoDiarioController extends Controller
 
         $serie_real=$request->serie_real;
         $repeticion_real=$request->repeticion_real;
-        $distancia_real=$request->distancia_real;
+        //$distancia_real=$request->distancia_real;
         $peso_real=$request->peso_real;
         $ejercicio_id=$request->ejercicio_id;
         $evolucion_ejercicios_id=$request->evolucion_ejercicios_id;
 
         try { 
 
-            DB::insert("INSERT INTO `evolucion_ejercicios_datos` (`serie`, `repeticion`, `distancia`, `peso`, `ejercicio_id`, `evolucion_ejercicios_id`) 
-            VALUES (?, ?, ?, ?, ?, ?)",[$serie_real,$repeticion_real,$distancia_real,$peso_real,$ejercicio_id,$evolucion_ejercicios_id]);
+            DB::insert("INSERT INTO `evolucion_ejercicios_datos` (`serie`, `repeticion`, `peso`, `ejercicio_id`, `evolucion_ejercicios_id`) 
+            VALUES (?, ?, ?, ?, ?)",[$serie_real,$repeticion_real,$peso_real,$ejercicio_id,$evolucion_ejercicios_id]);
         
 
         } catch(\Illuminate\Database\QueryException $ex){ 
@@ -160,7 +160,7 @@ class EntrenamientoDiarioController extends Controller
        
     public function getEditarDataEntrenamientoDiario(Request $request){
         $evolucion_ejercicios_tabla2 = DB::select('select distinct e.ejercicio_id,ee.tabla_de_ejercicios_id,e.nombre, eed.serie as serie_real,
-        eed.repeticion as repeticion_real,eed.distancia as distancia_real,eed.peso as peso_real,ee.tabla_de_ejercicios_id
+        eed.repeticion as repeticion_real,eed.peso as peso_real,ee.tabla_de_ejercicios_id
         FROM tabla_de_ejercicios as te inner join asignacion_rutina_ejercicios as are on 
         te.tabla_de_ejercicios_id=are.tabla_de_ejercicios_id inner JOIN ejercicio as e on 
         are.ejercicio_id=e.ejercicio_id inner join evolucion_ejercicios as ee on 
@@ -177,7 +177,7 @@ class EntrenamientoDiarioController extends Controller
         try {
             DB::update('update evolucion_ejercicios_datos set serie = ? where evolucion_ejercicios_datos_id = ?', [$request->serie_real,$request->evolucion_ejercicios_datos_id]);
             DB::update('update evolucion_ejercicios_datos set repeticion = ? where evolucion_ejercicios_datos_id = ?', [$request->repeticion_real,$request->evolucion_ejercicios_datos_id]);
-            DB::update('update evolucion_ejercicios_datos set distancia = ? where evolucion_ejercicios_datos_id = ?', [$request->distancia_real,$request->evolucion_ejercicios_datos_id]);
+           // DB::update('update evolucion_ejercicios_datos set distancia = ? where evolucion_ejercicios_datos_id = ?', [$request->distancia_real,$request->evolucion_ejercicios_datos_id]);
             DB::update('update evolucion_ejercicios_datos set peso = ? where evolucion_ejercicios_datos_id = ?', [$request->peso_real,$request->evolucion_ejercicios_datos_id]);
 
         }catch(\Illuminate\Database\QueryException $ex){ 

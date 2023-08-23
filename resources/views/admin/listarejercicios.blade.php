@@ -88,16 +88,7 @@
                                         @endforeach                                        
                                 </select>
                         </div>
-                        <div class="form-group">
-                            <label style="font-size:13px" for="listado_tipo"><b>Listado Tipos de Ejercicios</b></label>
-    
-                                <select class="js-example-responsive js-example-placeholder-single js-states form-control" id="id_label_tipo" required>
-                                        <option value=""></option>
-                                        @foreach($tipos as $t)
-                                            <option value="{{$t->tipo_ejercicio_id}}">{{$t->nombre}}</option>
-                                        @endforeach                                        
-                                </select>
-                        </div>
+                       
                         @if(Session('idRole')!=5)
                         <div class="form-group" id="ejercicioPorDefectoDiv">
                             <label  style="font-size:13px" class="checkbox-wrap checkbox-primary">
@@ -151,16 +142,7 @@
                                     @endforeach                                        
                             </select>
                     </div>
-                    <div class="form-group">
-                        <label style="font-size:13px" for="listado_tipo"><b>Listado Tipos de Ejercicios</b></label>
-
-                            <select class="js-example-responsive js-example-placeholder-single js-states form-control" id="id_label_tipo_update" required>
-                                    <option value=""></option>
-                                    @foreach($tipos as $t)
-                                        <option value="{{$t->tipo_ejercicio_id}}">{{$t->nombre}}</option>
-                                    @endforeach                                        
-                            </select>
-                    </div>
+                   
                     @if(Session('idRole')!=5)
                         <div class="form-group" id="ejercicioPorDefectoDiv">
                             <label  style="font-size:13px" class="checkbox-wrap checkbox-primary">
@@ -315,7 +297,7 @@ idRole = <?php echo Session('idRole'); ?>;
 
                         document.getElementById('nombreEditar').value=dataJson[0]["nombre"];
                         $("#id_label_categoria_update").val(dataJson[0]["categoria_id"])
-                        $("#id_label_tipo_update").val(dataJson[0]["tipo_id"])
+                        //$("#id_label_tipo_update").val(dataJson[0]["tipo_id"])
                         //document.getElementById('ejercicioPorDefectoEditar').checked=dataJson[0]["ejercicioPorDefecto"];
 
                         $('#updateModal').modal('show');
@@ -341,7 +323,7 @@ idRole = <?php echo Session('idRole'); ?>;
 
                         document.getElementById('nombreEditar').value=dataJson[0]["nombre"];
                         $("#id_label_categoria_update").val(dataJson[0]["categoria_id"])
-                        $("#id_label_tipo_update").val(dataJson[0]["tipo_id"])
+                        //$("#id_label_tipo_update").val(dataJson[0]["tipo_id"])
                         document.getElementById('ejercicioPorDefectoEditar').checked=dataJson[0]["ejercicioPorDefecto"];
 
                         $('#updateModal').modal('show');
@@ -403,7 +385,7 @@ idRole = <?php echo Session('idRole'); ?>;
                     nombre: $("#nombre").val(),
                     ejercicioPorDefecto: $("#ejercicioPorDefecto").val(),
                     categoria_id : $("#id_label_categoria").val(),
-                    tipo_id : $("#id_label_tipo").val()
+                   // tipo_id : $("#id_label_tipo").val()
 
                 },
                 success: function(dataResult){
@@ -437,7 +419,7 @@ idRole = <?php echo Session('idRole'); ?>;
                     _token:'{{ csrf_token() }}',
                     nombre: $('#nombreEditar').val(),
                     nombre_categoria: $("#id_label_categoria_update").val(),
-                    nombre_tipo: $("#id_label_tipo_update").val(),
+                    //nombre_tipo: $("#id_label_tipo_update").val(),
                     ejercicioPorDefecto:  $('#ejercicioPorDefectoEditar').val(),
                     id: data["id"]
                 },

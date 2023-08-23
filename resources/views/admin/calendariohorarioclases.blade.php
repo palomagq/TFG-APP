@@ -4,15 +4,14 @@
 <!--style="min-height: 1172.8px;"-->
 
 <style>
-@media (min-width: 991.98px){
+    @media (min-width: 991.98px){
 
-    .calendar_wrapper{
-        margin-left: 4.6rem !important;
-    }
+        .calendar_wrapper{
+            margin-left: 4.6rem !important;
+        }
 
 }
-
-    </style>
+</style>
 
 <div class="content-wrapper calendar_wrapper">
     <section class="content-header" style="text-align: center; margin-left: 22em;">

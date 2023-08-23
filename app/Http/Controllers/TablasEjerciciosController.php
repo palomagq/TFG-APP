@@ -17,7 +17,7 @@ class TablasEjerciciosController extends Controller
         Session::flash('active','TabladeEjercicios');
         $request->user()->authorizeRoles(['admin','socio','personal']);
         $categorias = DB::select('select * from categoria_ejercicio');
-        $tipos = DB::select('select * from tipo_ejercicio');
+        //$tipos = DB::select('select * from tipo_ejercicio');
         $socios = DB::select("select u.* from usuarios as u left join role_user as ru on u.id=ru.user_id 
        left join roles as r on ru.role_id=r.id where r.name='Socio'");       
         $ejercicios = DB::select("
@@ -37,14 +37,14 @@ class TablasEjerciciosController extends Controller
          
          
          ");
-        return view('admin.listartablasejercicios',compact('categorias','tipos','ejercicios','socios'));
+        return view('admin.listartablasejercicios',compact('categorias','ejercicios','socios'));
      }
 
 
      public function selectdataTablaEjercicios(Request $request){
         try { 
             $ejercicio = DB::select("select te.tabla_de_ejercicios_id as id,te.nombre_rutina_ejercicio,e.nombre, are.serie as serie_objetivo,
-            are.repeticion as repeticion_objetivo,are.distancia as distancia_objetivo,e.ejercicio_id,ug.usuarios_id, u.id
+            are.repeticion as repeticion_objetivo,e.ejercicio_id,ug.usuarios_id, u.id
             FROM tabla_de_ejercicios as te inner join asignacion_rutina_ejercicios as are on 
             are.tabla_de_ejercicios_id=te.tabla_de_ejercicios_id inner join ejercicio as e 
             on e.ejercicio_id=are.ejercicio_id inner join usuarios as u on te.usuario_id=u.id 
@@ -163,7 +163,7 @@ class TablasEjerciciosController extends Controller
     public function getEditarDataTablaEjercicios(Request $request){
         $tablaEjercicioData = DB::select("select te.tabla_de_ejercicios_id as id,te.nombre_rutina_ejercicio,e.ejercicio_id as ejercicio_id,e.nombre,
          are.serie as serie_objetivo,
-        are.repeticion as repeticion_objetivo,are.distancia as distancia_objetivo
+        are.repeticion as repeticion_objetivo
         FROM tabla_de_ejercicios as te inner join asignacion_rutina_ejercicios as are on are.tabla_de_ejercicios_id=te.tabla_de_ejercicios_id 
         inner join ejercicio as e on e.ejercicio_id=are.ejercicio_id 
         left join usuario_ejercicio as ue on ue.ejercicio_id=e.ejercicio_id
@@ -178,7 +178,7 @@ class TablasEjerciciosController extends Controller
         try {
             DB::update('update asignacion_rutina_ejercicios set serie = ? where ejercicio_id = ? and tabla_de_ejercicios_id = ?', [$request->serie_objetivo,$request->ejercicio_id,$request->id]);
             DB::update('update asignacion_rutina_ejercicios set repeticion = ? where ejercicio_id = ? and tabla_de_ejercicios_id = ?', [$request->repeticion_objetivo,$request->ejercicio_id,$request->id]);
-            DB::update('update asignacion_rutina_ejercicios set distancia = ? where ejercicio_id = ? and tabla_de_ejercicios_id = ?', [$request->distancia_objetivo,$request->ejercicio_id,$request->id]);
+           // DB::update('update asignacion_rutina_ejercicios set distancia = ? where ejercicio_id = ? and tabla_de_ejercicios_id = ?', [$request->distancia_objetivo,$request->ejercicio_id,$request->id]);
 
         }catch(\Illuminate\Database\QueryException $ex){ 
  
