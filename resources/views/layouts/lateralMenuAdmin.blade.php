@@ -1,9 +1,9 @@
 
 
-    <a href="{{route('listarusuarios')}}" class="brand-link">
+    <!--<a href="{{route('listarusuarios')}}" class="brand-link">-->
         <!--<img src="" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: 0.8;" />-->
-        <span class="brand-text font-weight-light" style="margin-left:1em;">FitEnerGym</span>
-    </a>
+        <span class="brand-link font-weight-light" style="margin-left:1em;">FitEnerGym</span>
+    <!--</a>--->
 
     <div class="sidebar">
        <!-- <div class="sidebar os-host os-theme-light os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-scrollbar-horizontal-hidden os-host-transition">
@@ -95,7 +95,7 @@
 
                                     
 
-                                    @if((Session('idRole') == 1) || (Session('idRole') == 2) ||  (Session('idRole') == 3))
+                                    @if((Session('idRole') == 1) || (Session('idRole') == 2) ||  (Session('idRole') == 3) ||  (Session('idRole') == 4))
 
                                         <li 
                                         @if(session('active')=='Personal')
@@ -133,7 +133,7 @@
                                         </li>
                                     @endif
 
-                                    @if((Session('idRole') == 1) || (Session('idRole') == 2))
+                                    @if((Session('idRole') == 1) || (Session('idRole') == 2) ||  (Session('idRole') == 3))
 
                                         <li 
                                         @if(session('active')=='Recepcion')

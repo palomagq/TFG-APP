@@ -123,10 +123,11 @@
                                 </div>
                             </div>
                         </div>
-                @else
+                @elseif (Session('idRole') != 1)
                   <div style="margin-left: 1em; margin-top:0.3em;">
                     <p>Perteneces al gimnasio <b>{{Session('id_user_gimnasio')}}</b></p>
                   </div>
+               
                 @endif
                   
                 </ul>

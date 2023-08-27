@@ -26,6 +26,7 @@
                                                 <th>DNI del socio</th>
                                                 <th>Fecha de pago</th>
                                                 <th>Cuota de pago</th>
+                                                <th>Gimnasio</th>
                                               </tr>
                                               
                                         </thead>
@@ -65,16 +66,20 @@ $(document).ready( function () {
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
             ajax: {
-                url: "{{route('selectdataHistorialdePago')}}",//'php/identidades.php',
+                url: "{{route('selectdataHistorialdePago')}}",
                 type: 'post',
                 data: {
-                    "_token": $("meta[name='csrf-token']").attr("content")
+                    "_token": $("meta[name='csrf-token']").attr("content"),
+                    "id_gimnasio": function() { 
+                        console.log($('#id_gimnasio_selected_calendario').val());
+                        return $('#id_gimnasio_selected_calendario').val() 
+                    },
                 },                          
             },
             responsive: true,
 
             
-            columns: [{ data: "nombre" }, { data: "apellidos" },{data: "dni"},{data: "fecha_pago", render: DataTable.render.datetime( 'D/M/YYYY' ) },{data: "cuota_pago"}],
+            columns: [{ data: "nombre" }, { data: "apellidos" },{data: "dni"},{data: "fecha_pago", render: DataTable.render.datetime( 'D/M/YYYY' ) },{data: "cuota_pago"}, {data: "nombregimnasio_localidad"}],
         });
 
 
@@ -95,6 +100,12 @@ $(document).ready( function () {
                 e.stopPropagation();
             } 
         } );
+
+        //hace el rellamado y filtro del gimnasio para el admin->listener
+     $('#id_gimnasio_selected_calendario').on('change', function() {
+        console.log("reload")
+        datatable.ajax.reload();
+    });
 
 });
         

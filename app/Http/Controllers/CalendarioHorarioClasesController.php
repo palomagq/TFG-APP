@@ -64,7 +64,7 @@ class CalendarioHorarioClasesController extends Controller
                 $clase_matriculada = DB::select("
 
                 select cp.clase_planificada_id,s.capacidad-(select count(*) from capacidad_clase c where c.clase_planificada_id=cp.clase_planificada_id) as capacidad,cp.fecha_clase,cp.hora_inicio,cp.hora_fin,c.nombre as nombre_clase, 
-                s.nombre as nombre_sala ,g.gimnasio_id,c.clases_id,s.sala_id,cp.monitor_id, cc.capacidad_clase_id
+                s.nombre as nombre_sala ,g.gimnasio_id,c.clases_id,s.sala_id,cp.monitor_id, cc.capacidad_clase_id, case when cp.fecha_clase<curdate() then 0 else 1 end as puedeInscribirse
                 FROM clase_planificada as cp inner join clases as c on cp.clases_id=c.clases_id inner join 
                 sala as s on cp.sala_id=s.sala_id and s.gimnasio_id=c.gimnasio_id inner join gimnasio as g 
                 on g.gimnasio_id=c.gimnasio_id and g.gimnasio_id=s.gimnasio_id left join usuarios as u on u.id=cp.monitor_id

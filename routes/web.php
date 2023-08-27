@@ -179,6 +179,8 @@ Route::group(['middleware' => 'auth'], function () {
    Route::post('/selectdataEvolucionEjercicios', 'EvolucionEjercicioController@selectdataEvolucionEjercicios')->name('selectdataEvolucionEjercicios');
    Route::post('/selectSocioGimnasio', 'EvolucionEjercicioController@selectSocioGimnasio')->name('selectSocioGimnasio');
 
+   //Grafica Evolucion
+   Route::post('/grafica', 'EvolucionEjercicioController@grafica')->name('grafica');
 
 
 });
@@ -193,4 +195,3 @@ Auth::routes();
     Route::post('/reset_password', 'Auth\ResetPasswordController@resetPassword')->name('reset_password');
     Route::post('/update_password', 'Auth\ResetPasswordController@updatePassword')->name('update_password');
 
-    Route::post('/grafica', 'EvolucionEjercicioController@grafica')->name('grafica');

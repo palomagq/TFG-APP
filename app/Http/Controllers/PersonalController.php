@@ -25,7 +25,7 @@ class PersonalController extends Controller
 
         try{
 
-            if((Session('idRole') == 2) || (Session('idRole') == 3)){
+            if((Session('idRole') == 2) || (Session('idRole') == 3) || (Session('idRole') == 4)){
                 $personal = DB::select("select u.id,u.nombre,u.apellidos,u.dni,u.usersname,u.email,u.telefono,u.fechaNac,
                 case when u.sexo=0 then 'Mujer' else 'Hombre' end as sexo_nombre,
                 GROUP_CONCAT(DISTINCT concat(g.nombre,' ( ', g.localidad,' ) ') SEPARATOR ' - ') as nombregimnasio_localidad 

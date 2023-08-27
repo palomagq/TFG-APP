@@ -18,8 +18,21 @@ class TablasEjerciciosController extends Controller
         $request->user()->authorizeRoles(['admin','socio','personal']);
         $categorias = DB::select('select * from categoria_ejercicio');
         //$tipos = DB::select('select * from tipo_ejercicio');
-        $socios = DB::select("select u.* from usuarios as u left join role_user as ru on u.id=ru.user_id 
-       left join roles as r on ru.role_id=r.id where r.name='Socio'");       
+        //$id_gimnasio=$request->id_gimnasio;
+
+        if(Session('idRole') == 1){
+            $socios = DB::select("select distinct u.* from usuarios as u left join role_user as ru on u.id=ru.user_id 
+            left join roles as r on ru.role_id=r.id 
+            inner join usuario_gimnasio as ug on ug.usuarios_id=u.id inner join 
+            gimnasio as g on g.gimnasio_id=ug.gimnasio_id
+            where r.name='Socio'"); 
+        }else{
+            $socios = DB::select("select distinct u.* from usuarios as u left join role_user as ru on u.id=ru.user_id 
+            left join roles as r on ru.role_id=r.id 
+            inner join usuario_gimnasio as ug on ug.usuarios_id=u.id inner join 
+            gimnasio as g on g.gimnasio_id=ug.gimnasio_id
+            where r.name='Socio' and g.gimnasio_id=".Session('id_gimnasio')); 
+        }    
         $ejercicios = DB::select("
          
          select e.ejercicio_id,e.nombre as nombreEjercicio
@@ -51,7 +64,21 @@ class TablasEjerciciosController extends Controller
             inner join usuario_gimnasio as ug 
             on u.id=ug.usuarios_id 
             inner join gimnasio as g on ug.gimnasio_id=g.gimnasio_id
-            where g.gimnasio_id=".Session('id_gimnasio'));
+            where g.gimnasio_id=".Session('id_gimnasio')." and u.id=".Session('idUsuario')."
+            
+            UNION
+            
+            select te.tabla_de_ejercicios_id as id,te.nombre_rutina_ejercicio,e.nombre, are.serie as serie_objetivo,
+            are.repeticion as repeticion_objetivo,e.ejercicio_id,ug.usuarios_id, u.id
+            FROM tabla_de_ejercicios as te inner join asignacion_rutina_ejercicios as are on 
+            are.tabla_de_ejercicios_id=te.tabla_de_ejercicios_id inner join ejercicio as e 
+            on e.ejercicio_id=are.ejercicio_id inner join usuarios as u on te.usuario_id=u.id 
+            inner join usuario_gimnasio as ug 
+            on u.id=ug.usuarios_id 
+            inner join gimnasio as g on ug.gimnasio_id=g.gimnasio_id
+            inner join role_user as ru on ru.user_id=u.id 
+            where g.gimnasio_id=".Session('id_gimnasio')." and ru.role_id in (1,4)
+            ");
 
 
             $data = array(

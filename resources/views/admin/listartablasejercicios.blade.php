@@ -21,7 +21,7 @@
                                     <table id="table_id" class="table table-bordered table-striped dataTable dtr-inline"  cellspacing="0" width="100%" top="2em">
                                         <thead>
                                             <tr>
-                                                <th>Nombre de la tabla/rutina de ejercicios</th> 
+                                                <th>Nombre de la tabla de ejercicios</th> 
                                                 <th>Nombre del Ejercicio</th>
                                                 <th>Series</th>
                                                 <th>Repeticiones</th>

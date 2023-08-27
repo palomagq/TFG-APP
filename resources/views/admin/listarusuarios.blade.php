@@ -518,7 +518,7 @@
                         telefono: $("#telefono").val(),
                         fechaNac: $("#fechaNac").val(),
                         usersname: $("#usersname").val(),
-                        password: $("#password").val(),
+                        //password: $("#password").val(),
                         role_id: $("#id_label_rol-usuario").val(),
                         gimnasio_id: $('select[name="duallistbox_gimnasio[]"]').val(),
                         //manra de coger el dato selected del modal de insert

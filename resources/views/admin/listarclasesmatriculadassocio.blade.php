@@ -262,7 +262,7 @@ $(document).ready( function () {
             },
             responsive: true,
 
-            columns: [{ data: "nombregimnasio_localidad" }, { data: "nombre_clase" }, { data: "nombre_sala" }, { data: "fecha_clase", render: DataTable.render.datetime( 'D/M/YYYY' ) },{ data: "hora_inicio" },{ data: "hora_fin" },{data:"fecha_registro"} ],
+            columns: [{ data: "nombregimnasio_localidad" }, { data: "nombre_clase" }, { data: "nombre_sala" }, { data: "fecha_clase", render: DataTable.render.datetime( 'D/M/YYYY' ) },{ data: "hora_inicio" },{ data: "hora_fin" },{data:"fecha_registro", render: DataTable.render.datetime( 'D/M/YYYY' )} ],
         });
 
               //hacemos el trigger de un onclick, concretamente de un click en una etiqueta td con una clase (class) dtr-control

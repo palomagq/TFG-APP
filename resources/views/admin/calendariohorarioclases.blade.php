@@ -335,24 +335,24 @@ document.addEventListener('DOMContentLoaded', function() {
                         document.getElementById('hora_fin').value=dataResult["data"][0]["hora_fin"];
                         document.getElementById('clase_planificada_id').value=dataResult["data"][0]["clase_planificada_id"];
                         document.getElementById('capacidad_clase_id').value=dataResult["data"][0]["capacidad_clase_id"];
-
+                        
                         
                         if(document.getElementById('capacidad_clase_id').value==undefined || document.getElementById('capacidad_clase_id').value==""){
                             console.log(document.getElementById('capacidad_clase_id').value)
                             document.getElementById("deleteButttonModal").disabled = true;
-                            if(document.getElementById('capacidad').value > 0)
+                            if(document.getElementById('capacidad').value > 0 || dataResult["data"][0]["puedeInscribirse"] == 1)
                                 document.getElementById("addClassButton").disabled = false;
 
                             //$('#addClassButton').click();
                         }else{
                             document.getElementById("deleteButttonModal").disabled = false;
-                            if(document.getElementById('capacidad').value == 0)
+                            if(document.getElementById('capacidad').value == 0 || dataResult["data"][0]["puedeInscribirse"] == 0)
                                 document.getElementById("addClassButton").disabled = true;
 
                         }
 
                         
-                        if(document.getElementById('capacidad').value > 0 && document.getElementById("deleteButttonModal").disabled==true){
+                        if(document.getElementById('capacidad').value > 0 && document.getElementById("deleteButttonModal").disabled==true && dataResult["data"][0]["puedeInscribirse"] == 1){
                             document.getElementById("addClassButton").disabled = false;
                             //document.getElementById("deleteButttonModal").disabled = true;
                             //$('#addClassButton').click();

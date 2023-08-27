@@ -33,8 +33,22 @@ class EntrenamientoDiarioController extends Controller
             Session::flash('modal',1);
         }
 
-        $tablasejercicios = DB::select('select tabla_de_ejercicios_id,nombre_rutina_ejercicio from tabla_de_ejercicios where usuario_id='.Session('idUsuario'));
+        //$tablasejercicios = DB::select('select tabla_de_ejercicios_id,nombre_rutina_ejercicio from tabla_de_ejercicios where usuario_id='.Session('idUsuario'));
+        $tablasejercicios = DB::select("select te.tabla_de_ejercicios_id,te.nombre_rutina_ejercicio,g.nombre 
+        from tabla_de_ejercicios as te inner join usuarios as u on te.usuario_id=u.id 
+        inner join usuario_gimnasio as ug on u.id=ug.usuarios_id inner join gimnasio as g on g.gimnasio_id=ug.gimnasio_id
+        where te.usuario_id=".Session('idUsuario')."
 
+        UNION
+
+        select te.tabla_de_ejercicios_id,te.nombre_rutina_ejercicio,g.nombre 
+        from tabla_de_ejercicios as te inner join
+        usuarios as u on te.usuario_id=u.id 
+        inner join usuario_gimnasio as ug on u.id=ug.usuarios_id inner join gimnasio as g on g.gimnasio_id=ug.gimnasio_id 
+        inner join role_user as ru on
+        ru.user_id=u.id inner join roles as r on r.id=ru.role_id
+        where r.name in ('Socio','Admin') and g.gimnasio_id=".Session('id_gimnasio')
+            );
         return view('admin.entrenamientodiario',compact('tablasejercicios'));
      }
 
@@ -75,9 +89,24 @@ class EntrenamientoDiarioController extends Controller
         where te.usuario_id='.Session('idUsuario').' and ee.tabla_de_ejercicios_id='.$request->id_label_tabla_ejercicio);
 
 
-        $tablasejercicios = DB::select('select tabla_de_ejercicios_id,nombre_rutina_ejercicio from tabla_de_ejercicios
+       $tablasejercicios = DB::select('select tabla_de_ejercicios_id,nombre_rutina_ejercicio from tabla_de_ejercicios
          where usuario_id='.Session('idUsuario'));
+        /* $tablasejercicios = DB::select("select te.tabla_de_ejercicios_id,te.nombre_rutina_ejercicio,g.nombre 
+         from tabla_de_ejercicios as te inner join usuarios as u on te.usuario_id=u.id 
+         inner join usuario_gimnasio as ug on u.id=ug.usuarios_id inner join gimnasio as g on g.gimnasio_id=ug.gimnasio_id
+         where te.usuario_id=".Session('idUsuario')."
+        
+            UNION
 
+        select te.tabla_de_ejercicios_id,te.nombre_rutina_ejercicio,g.nombre 
+        from tabla_de_ejercicios as te inner join
+        usuarios as u on te.usuario_id=u.id 
+        inner join usuario_gimnasio as ug on u.id=ug.usuarios_id inner join gimnasio as g on g.gimnasio_id=ug.gimnasio_id 
+        inner join role_user as ru on
+        ru.user_id=u.id inner join roles as r on r.id=ru.role_id
+        where r.name in ('Socio','Admin') and g.gimnasio_id=".Session('id_gimnasio')
+        
+        );*/
         return view('admin.entrenamientodiario',compact('tablasejercicios','ejercicios'));
      }
 
