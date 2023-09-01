@@ -97,7 +97,7 @@ class SalaController extends Controller
 
 
         try { 
-            DB::delete('delete from sala where id='.$request->id);
+            DB::delete('delete from sala where sala_id='.$request->id);
         } catch(\Illuminate\Database\QueryException $ex){ 
             //dd($ex->getMessage()); //debug del msg de error
            

@@ -105,6 +105,21 @@
                                 
                             </div>
                         @endif
+
+                        <div class="form-row row">
+                            <div class="form-group col-md-6">
+                                <div class="row">
+                                    <label style="font-size:13px" for="series"><b>Series</b></label>
+                                    <input class="form-control form-control-border border-width-2 col-md-6" type="number" placeholder="Series" name="series" id="series" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <div class="row">
+                                    <label style="font-size:13px" for="repeticiones"><b>Repeticiones</b></label>
+                                    <input class="form-control form-control-border border-width-2 col-md-6" type="number" placeholder="Repeticiones" name="repeticiones" id="repeticiones" >                                   
+                                </div>
+                            </div>                           
+                        </div>
                       
                    </div>
                    
@@ -145,21 +160,21 @@
 
                     <div class="form-group">
                         <label style="font-size:13px" for="listado_ejercicio"><b>Listado de Ejercicios</b></label>
-                        <input class="form-control form-control-border border-width-2 col-md-6" type="text" placeholder="Nombre Ejercicio" name="ejercicioNombreEditar" id="ejercicioNombreEditar" required disabled>
+                        <input class="form-control form-control-border border-width-2 col-md-6" type="text" placeholder="Nombre del Ejercicio" name="ejercicioNombreEditar" id="ejercicioNombreEditar" required disabled>
 
                     </div>
-
+        
                     <div class="form-row row">
                         <div class="form-group col-md-6">
                             <div class="row">
                                 <label style="font-size:13px" for="series"><b>Series</b></label>
-                                <input class="form-control form-control-border border-width-2 col-md-6" type="number" placeholder="Series" name="series" id="series" required>
+                                <input class="form-control form-control-border border-width-2 col-md-6" type="number" placeholder="Series" name="seriesEditar" id="seriesEditar" required>
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <div class="row">
                                 <label style="font-size:13px" for="repeticiones"><b>Repeticiones</b></label>
-                                <input class="form-control form-control-border border-width-2 col-md-6" type="number" placeholder="Repeticiones" name="repeticiones" id="repeticiones" >                                   
+                                <input class="form-control form-control-border border-width-2 col-md-6" type="number" placeholder="Repeticiones" name="repeticionesEditar" id="repeticionesEditar" >                                   
                             </div>
                         </div>    
                         <!--<div class="form-group col-md-4">
@@ -235,6 +250,8 @@
 $(document).ready( function () {
 
         var duallistbox_socio = $('select[name="duallistbox_socio[]"]').bootstrapDualListbox();
+        //var duallistbox_socio_update = $('select[name="duallistbox_socio_update[]"]').bootstrapDualListbox();
+
          //var duallistbox_socio_update = $('select[name="duallistbox_gimnasio_update[]"]').bootstrapDualListbox();
         //selectdata
 
@@ -288,19 +305,18 @@ $(document).ready( function () {
                     cache: false,
                     data:{
                         _token:'{{ csrf_token() }}',
-                        id: data["ejercicio_id"]
+                        id: data["id"],
+                        ejercicio_nombre: data["nombre"]
                     },
                     success: function(dataResult){
                         console.log(dataResult)
                         //console.log(dataResult[0])
                         dataJson=JSON.parse(dataResult)
-
+                        //console.log(dataJson[0]["nombre"])
                         document.getElementById('nombreTablaEjercicioEditar').value=dataJson[0]["nombre_rutina_ejercicio"];
                         document.getElementById('ejercicioNombreEditar').value=dataJson[0]["nombre"];
-                        document.getElementById('series').value=dataJson[0]["serie_objetivo"];
-                        document.getElementById('repeticiones').value=dataJson[0]["repeticion_objetivo"];
-                        //document.getElementById('distancia').value=dataJson[0]["distancia_objetivo"];
-
+                        document.getElementById('seriesEditar').value=dataJson[0]["serie_objetivo"];
+                        document.getElementById('repeticionesEditar').value=dataJson[0]["repeticion_objetivo"];
 
                         //document.getElementById('ejercicioPorDefectoEditar').checked=dataJson[0]["ejercicioPorDefecto"];
 
@@ -326,7 +342,7 @@ $(document).ready( function () {
                 data:{
                     _token:'{{ csrf_token() }}',
                     id: data["id"],
-                    ejercicio_id: data["ejercicio_id"]
+                    ejercicio_nombre: data["nombre"]
 
                 },
                 success: function(dataResult){
@@ -361,6 +377,8 @@ $(document).ready( function () {
                     nombre_rutina_ejercicio: $("#nombreTablaEjercicio").val(),
                     id_label_ejercicio: $("#id_label_ejercicio").val(),
                     socio_id: $('select[name="duallistbox_socio[]"]').val(),
+                    serie:$("#series").val(),
+                    repeticion:$("#repeticiones").val()
 
 
                 },
@@ -395,13 +413,12 @@ $(document).ready( function () {
                     _token:'{{ csrf_token() }}',
                    /* nombre_rutina_ejercicio: $('#nombreTablaEjercicioEditar').val(),
                     nombre: $("#ejercicioNombreEditar").val(),*/
-                    serie_objetivo: $("#series").val(),
-                    repeticion_objetivo:  $('#repeticiones').val(),
+                    serie_objetivo: $("#seriesEditar").val(),
+                    repeticion_objetivo:  $('#repeticionesEditar').val(),
                     //distancia_objetivo:  $('#distancia').val(),
 
                     id: data["id"],
-                    ejercicio_id: data["ejercicio_id"],
-
+                    ejercicio_nombre: data["nombre"]
 
                 },
 

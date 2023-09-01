@@ -541,18 +541,19 @@
                                         </a>
                                         <ul class="nav nav-treeview">
                                        
-                                                                                 
-                                            <li class="nav-item">
-                                                <a href="{{route('EntrenamientoDiario')}}" 
-                                                    @if(session('active')=='EntrenamientoDiario')
-                                                        class="nav-link active"
-                                                    @else
-                                                        class="nav-link"
-                                                    @endif>
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Entrenamiento Diario</p>
-                                                </a>
-                                            </li>      
+                                            @if(Session('idRole') != 4)                                     
+                                                <li class="nav-item">
+                                                    <a href="{{route('EntrenamientoDiario')}}" 
+                                                        @if(session('active')=='EntrenamientoDiario')
+                                                            class="nav-link active"
+                                                        @else
+                                                            class="nav-link"
+                                                        @endif>
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>Entrenamiento Diario</p>
+                                                    </a>
+                                                </li>  
+                                            @endif    
                                             <li class="nav-item">
                                                 <a href="{{route('EvolucionEjercicios')}}" 
                                                     @if(session('active')=='EvolucionEjercicios')

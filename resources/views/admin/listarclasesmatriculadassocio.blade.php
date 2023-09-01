@@ -138,7 +138,7 @@
                             <div class="row">
                                 <label style="font-size:13px"  id="listado_salas" for="listado_salas"><b>Nombre Sala</b></label>
                                 <!--<input class="form-control form-control-border border-width-2" type="email" placeholder="Email" name="rol-usuario" id="rol-usuario" required>-->
-                                <select class="js-example-responsive js-example-placeholder-single js-states form-control" id="id_label_salas_update" disabled>
+                                <select class="js-example-responsive js-example-placeholder-single js-states form-control col-md-11" style="margin-left: 0.5em;" id="id_label_salas_update" disabled>
                                         <option value=""></option>   
                                         @foreach($salas as $s)
                                             <option value="{{$s->sala_id}}">{{$s->nombre}}</option>
@@ -150,14 +150,15 @@
                             <div class="row">
                                 <label style="font-size:13px"  id="listado_clases" for="listado_clases"><b>Nombre Clase</b></label>
                                 <!--<input class="form-control form-control-border border-width-2" type="email" placeholder="Email" name="rol-usuario" id="rol-usuario" required>-->
-                                <select class="js-example-responsive js-example-placeholder-single js-states form-control" style="margin-left: 0.4em;" id="id_label_clases_update" disabled>
+                                <select class="js-example-responsive js-example-placeholder-single js-states form-control col-md-11" style="margin-left: 0.5em;" id="id_label_clases_update" disabled>
                                         <option value=""></option> 
                                         @foreach($clases as $c)
                                             <option value="{{$c->clases_id}}">{{$c->nombre}}</option>
                                         @endforeach                                       
                                 </select>
                             </div>
-                        </div>                        
+                        </div> 
+                    </div>                       
                         <div class="form-group">
                             <label style="font-size:13px" for="fecha_clase"><b>Fecha de la Clase</b></label>
                             <input class="form-control form-control-border border-width-2" type="date" placeholder="Fecha de la Clase" name="fecha_claseEditar" id="fecha_claseEditar"  disabled>
@@ -167,19 +168,16 @@
                             <div class="form-group col-md-6">
                                 <div class="row">
                                     <label style="font-size:13px;" for="hora_inicio" class="col-md-6"><b>Hora Inicio</b></label>
-                                    <input class="form-control form-control-border border-width-2" type="time"  placeholder="Hora Inicio" name="hora_inicioEditar" id="hora_inicioEditar"  disabled>
+                                    <input class="form-control form-control-border border-width-2 col-md-11"  style="margin-left: 0.5em;" type="time"  placeholder="Hora Inicio" name="hora_inicioEditar" id="hora_inicioEditar"  disabled>
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
                                 <div class="row">
                                     <label style="font-size:13px;" for="hora_fin" class="col-md-6"><b>Hora Fin</b></label>
-                                    <input class="form-control form-control-border border-width-2" style="margin-left: 0.4em;" type="time" placeholder="Hora Fin" name="hora_finEditar" id="hora_finEditar" disabled>
+                                    <input class="form-control form-control-border border-width-2 col-md-11" style="margin-left: 0.4em;" type="time" placeholder="Hora Fin" name="hora_finEditar" id="hora_finEditar" disabled>
                                 </div>
                             </div>
-                        </div>
-                                                       
-                    </div>
-                                       
+                        </div>                    
               
                 </div>
                <hr>

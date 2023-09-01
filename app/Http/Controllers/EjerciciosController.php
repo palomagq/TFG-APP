@@ -62,8 +62,8 @@ class EjerciciosController extends Controller
                /* if ($request->ejercicioPorDefecto == null){
                         $request->ejercicioPorDefecto.value(0);
                     }*/
-                    DB::insert('insert into ejercicio (nombre,ejercicioPorDefecto,categoria_id) 
-                    values (?,?,?) ' ,[$request->nombre,0,$request->categoria_id]);
+                    DB::insert("insert into ejercicio (nombre,ejercicioPorDefecto,categoria_id) 
+                    values (?,?,?) " ,[$request->nombre,0,$request->categoria_id]);
 
             } catch(\Illuminate\Database\QueryException $ex){ 
                     return ["code"=>500, "msg"=>"Se ha producido un error al crear el ejercicio".$ex->getMessage()];//500;
@@ -78,7 +78,7 @@ class EjerciciosController extends Controller
                     values (?,?,?) ' ,[$request->nombre,$request->ejercicioPorDefecto,$request->categoria_id]);
 
             } catch(\Illuminate\Database\QueryException $ex){ 
-                    return ["code"=>500, "msg"=>"Se ha producido un error al crear el ejercicio".$ex->getMessage()];//500;
+                    return ["code"=>500, "msg"=>"Se ha producido un error al crear el ejercicio xx".$ex->getMessage()];//500;
                     //return back();
             }
         }
@@ -121,14 +121,13 @@ class EjerciciosController extends Controller
     }
 
     public function getEditarDataEjercicios(Request $request){
-        $categoriaData = DB::select("select e.ejercicio_id as id,e.nombre,e.ejercicioPorDefecto as ejercicioPorDefecto,ce.nombre as nombre_categoria,
+        $ejercicioData = DB::select("select e.ejercicio_id as id,e.nombre,e.ejercicioPorDefecto as ejercicioPorDefecto,ce.nombre as nombre_categoria,
         ce.categoria_ejercicio_id as categoria_id
-        from ejercicio as e inner join  categoria_ejercicio as ce on e.categoria_id=ce.categoria_ejercicio_id inner join 
-        tipo_ejercicio as te on e.tipo_id=te.tipo_ejercicio_id
+        from ejercicio as e inner join  categoria_ejercicio as ce on e.categoria_id=ce.categoria_ejercicio_id
         where e.ejercicio_id=".$request->id. 
-        " group by e.ejercicio_id,e.nombre,e.ejercicioPorDefecto,ce.nombre,te.nombre,ce.categoria_ejercicio_id");
+        " group by e.ejercicio_id,e.nombre,e.ejercicioPorDefecto,ce.nombre,ce.categoria_ejercicio_id");
   
-        return json_encode($categoriaData);
+        return json_encode($ejercicioData);
     }
 
     public function updatedataEjercicios(Request $request)

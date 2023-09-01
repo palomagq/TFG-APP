@@ -147,7 +147,7 @@
                         <div class="form-group" id="ejercicioPorDefectoDiv">
                             <label  style="font-size:13px" class="checkbox-wrap checkbox-primary">
                                 Ejercicio Por Defecto
-                                <input type="checkbox"  name="ejercicioPorDefectoEditar" id="ejercicioPorDefectoEditar" value="0" onclick="cambiarValor()" />
+                                <input type="checkbox"  name="ejercicioPorDefectoEditar" id="ejercicioPorDefectoEditar" value="1" onclick="cambiarValor()" />
                                 <span class="checkmark"></span>
                             </label>
                         </div>
@@ -307,7 +307,7 @@ idRole = <?php echo Session('idRole'); ?>;
                         console.log(e)
                     }
                 });
-            }else if(data['pordefecto']=="Sí" && idRole != 5){
+            }else if((data['pordefecto']=="Sí" && idRole != 5) || (data['pordefecto']=="No" && idRole != 5)){
                 $.ajax({
                     url: "{{route('getEditarDataEjercicios')}}",
                     type: "POST",

@@ -57,7 +57,7 @@ class TablasEjerciciosController extends Controller
      public function selectdataTablaEjercicios(Request $request){
         try { 
             $ejercicio = DB::select("select te.tabla_de_ejercicios_id as id,te.nombre_rutina_ejercicio,e.nombre, are.serie as serie_objetivo,
-            are.repeticion as repeticion_objetivo,e.ejercicio_id,ug.usuarios_id, u.id
+            are.repeticion as repeticion_objetivo
             FROM tabla_de_ejercicios as te inner join asignacion_rutina_ejercicios as are on 
             are.tabla_de_ejercicios_id=te.tabla_de_ejercicios_id inner join ejercicio as e 
             on e.ejercicio_id=are.ejercicio_id inner join usuarios as u on te.usuario_id=u.id 
@@ -69,7 +69,7 @@ class TablasEjerciciosController extends Controller
             UNION
             
             select te.tabla_de_ejercicios_id as id,te.nombre_rutina_ejercicio,e.nombre, are.serie as serie_objetivo,
-            are.repeticion as repeticion_objetivo,e.ejercicio_id,ug.usuarios_id, u.id
+            are.repeticion as repeticion_objetivo
             FROM tabla_de_ejercicios as te inner join asignacion_rutina_ejercicios as are on 
             are.tabla_de_ejercicios_id=te.tabla_de_ejercicios_id inner join ejercicio as e 
             on e.ejercicio_id=are.ejercicio_id inner join usuarios as u on te.usuario_id=u.id 
@@ -154,8 +154,8 @@ class TablasEjerciciosController extends Controller
 
                         try{
                             for($i=0; $i<count($listadoEjercicios);$i++){
-                                DB::insert('insert into asignacion_rutina_ejercicios (tabla_de_ejercicios_id,ejercicio_id) 
-                                values (?,?) ' ,[$tabla_de_ejercicio[0]->tabla_de_ejercicios_id,$listadoEjercicios[$i]]);
+                                DB::insert('insert into asignacion_rutina_ejercicios (tabla_de_ejercicios_id,ejercicio_id,serie,repeticion) 
+                                values (?,?,?,?) ' ,[$tabla_de_ejercicio[0]->tabla_de_ejercicios_id,$listadoEjercicios[$i],$request->serie,$request->repeticion]);
                             }
                         } catch(\Illuminate\Database\QueryException $ex){ 
                             DB::rollback();
@@ -179,39 +179,40 @@ class TablasEjerciciosController extends Controller
 
 
         try { 
-            DB::delete('delete from asignacion_rutina_ejercicios where ejercicio_id='.$request->ejercicio_id.' and tabla_de_ejercicios_id='.$request->id );
+            DB::delete("delete from asignacion_rutina_ejercicios where ejercicio_id=  (select ejercicio_id from ejercicio where nombre = '".$request->ejercicio_nombre."')  and tabla_de_ejercicios_id=".$request->id );
         } catch(\Illuminate\Database\QueryException $ex){ 
            
-            return ["code"=>500, "msg"=>"Se ha producido un error al borrar la tabla de ejercicios"];//500;
+            return ["code"=>500, "msg"=>"Se ha producido un error al borrar la tabla de ejercicios".$ex->getMessage()];//500;
         }
         return ["code"=>200, "msg"=>"Se ha borrado la tabla de ejercicios correctamente"];//200;
     }
     
     public function getEditarDataTablaEjercicios(Request $request){
         $tablaEjercicioData = DB::select("select te.tabla_de_ejercicios_id as id,te.nombre_rutina_ejercicio,e.ejercicio_id as ejercicio_id,e.nombre,
-         are.serie as serie_objetivo,
-        are.repeticion as repeticion_objetivo
+         are.serie as serie_objetivo, are.repeticion as repeticion_objetivo
         FROM tabla_de_ejercicios as te inner join asignacion_rutina_ejercicios as are on are.tabla_de_ejercicios_id=te.tabla_de_ejercicios_id 
         inner join ejercicio as e on e.ejercicio_id=are.ejercicio_id 
         left join usuario_ejercicio as ue on ue.ejercicio_id=e.ejercicio_id
-        where e.ejercicio_id=".$request->id);
+        where te.tabla_de_ejercicios_id=".$request->id. " and e.nombre='".$request->ejercicio_nombre."'");
   
         return json_encode($tablaEjercicioData);
     }
 
     public function updatedataTablaEjercicios(Request $request)
     {
-       
+
+
         try {
-            DB::update('update asignacion_rutina_ejercicios set serie = ? where ejercicio_id = ? and tabla_de_ejercicios_id = ?', [$request->serie_objetivo,$request->ejercicio_id,$request->id]);
-            DB::update('update asignacion_rutina_ejercicios set repeticion = ? where ejercicio_id = ? and tabla_de_ejercicios_id = ?', [$request->repeticion_objetivo,$request->ejercicio_id,$request->id]);
+
+            DB::update('update asignacion_rutina_ejercicios set serie = ? where ejercicio_id = (select ejercicio_id from ejercicio where nombre = ?) and tabla_de_ejercicios_id = ?', [$request->serie_objetivo,$request->ejercicio_nombre,$request->id]);
+            DB::update('update asignacion_rutina_ejercicios set repeticion = ? where ejercicio_id = (select ejercicio_id from ejercicio where nombre = ?) and tabla_de_ejercicios_id = ?', [$request->repeticion_objetivo,$request->ejercicio_nombre,$request->id]);
            // DB::update('update asignacion_rutina_ejercicios set distancia = ? where ejercicio_id = ? and tabla_de_ejercicios_id = ?', [$request->distancia_objetivo,$request->ejercicio_id,$request->id]);
 
         }catch(\Illuminate\Database\QueryException $ex){ 
  
-                return ["code"=>500, "msg"=>"Se ha producido un error al actualizar la tabla de ejercicios ".$ex->getMessage()];//500;
+                return ["code"=>500, "msg"=>"Se ha producido un error al actualizar la tabla de ejercicios "];//500;
 
-            }
+        }
     
         return ["code"=>200, "msg"=>"Se ha actualizado la tabla de ejercicios correctamente"];//200;
       
