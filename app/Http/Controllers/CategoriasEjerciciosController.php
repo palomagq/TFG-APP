@@ -57,12 +57,12 @@ class CategoriasEjerciciosController extends Controller
 
     public function insertdataCategoriaEjercicios(Request $request){
         try { 
-            DB::insert('insert into categoria_ejercicio (nombre) 
-            values (?) ' ,[$request->nombre]);
+            DB::insert('insert into categoria_ejercicio (nombre,usuario_id) 
+            values (?,?) ' ,[$request->nombre,Session('idUsuario')]);
 
         } catch(\Illuminate\Database\QueryException $ex){ 
 
-            return ["code"=>500, "msg"=>"Se ha producido un error al crear la categoría"];//500;
+            return ["code"=>500, "msg"=>"Se ha producido un error al crear la categoría".$ex->getMessage()];//500;
             //return back();
         }
         
@@ -74,7 +74,7 @@ class CategoriasEjerciciosController extends Controller
 
 
         try { 
-            DB::delete('delete from categoria_ejercicio where categoria_ejercicio_id='.$request->id);
+            DB::delete('delete from categoria_ejercicio where categoria_ejercicio_id='.$request->id." and usuario_id=".session('idUsuario'));
         } catch(\Illuminate\Database\QueryException $ex){ 
            
             return ["code"=>500, "msg"=>"Se ha producido un error al borrar la categoría"];//500;

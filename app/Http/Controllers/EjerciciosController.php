@@ -15,7 +15,16 @@ class EjerciciosController extends Controller
         Session::flash('active','Ejercicios');
 
         $request->user()->authorizeRoles(['admin','personal','socio']);
-        $categorias = DB::select('select * from categoria_ejercicio');
+        $categorias = DB::select('select distinct ce.* from categoria_ejercicio as ce inner join usuarios as u on u.id=ce.usuario_id 
+        where u.id='.Session('idUsuario').'
+        
+        union
+
+        select distinct ce.* from categoria_ejercicio as ce inner join  usuarios as u on u.id=ce.usuario_id inner join 
+        role_user as ru on u.id=ru.user_id inner join roles as r on r.id=ru.role_id inner join usuario_gimnasio as ug 
+        on ug.usuarios_id=u.id inner join gimnasio as g on g.gimnasio_id=ug.gimnasio_id
+        where ru.role_id in (1,4) and g.gimnasio_id='.Session('id_gimnasio')
+        );
        // $tipos = DB::select('select * from tipo_ejercicio');
         $ejercicios = DB::select('select * from ejercicio');
         return view('admin.listarejercicios',compact('categorias','ejercicios'));
